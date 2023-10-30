@@ -1,0 +1,22 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Finnbyte/Fixu.git"
+  },
+  "author": "Finnbyte",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Finnbyte/Fixu/issues"
+  },
+  "homepage": "https://github.com/Finnbyte/Fixu#readme",
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
+}
