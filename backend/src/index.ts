@@ -51,7 +51,7 @@ for (const schema of [...sessionSchemas, ...usersSchemas]) {
 server.register(usersRoute, { prefix: "api/users" });
 server.register(sessionRoute, { prefix: "api/session" });
 
-server.listen({ port: 8080 }, (err) => {
+server.listen({ port: 3000 }, (err) => {
   if (err) {
     console.log(err);
     process.exit(1);
