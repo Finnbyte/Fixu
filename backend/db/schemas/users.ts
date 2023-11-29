@@ -10,6 +10,7 @@ export const users = mysqlTable("users", {
   firstName: varchar("first_name", { length: 64 }).notNull(),
   lastName: varchar("last_name", { length: 64 }).notNull(),
   email: varchar("email", { length: 64 }).notNull(),
+  email: varchar("email", { length: 64 }).notNull().unique(),
   password: varchar("password", { length: 64 }).notNull(),
   privilege: privilegeEnum.notNull()
 });
