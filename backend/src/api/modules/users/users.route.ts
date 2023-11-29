@@ -21,7 +21,7 @@ export default async function usersRoute(route: FastifyInstance) {
     "/",
     {
       schema: {
-        body: $ref("insertUserSchema"),
+        body: $ref("registerSchema"),
       },
     },
     POST
