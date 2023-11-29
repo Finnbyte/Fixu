@@ -1,4 +1,4 @@
-POST http://localhost:3000/user.create
+POST http://localhost:3000/users
 {
   "firstName": "Matti",
   "lastName": "Mattinen",
