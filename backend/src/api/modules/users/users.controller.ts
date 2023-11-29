@@ -24,7 +24,7 @@ export async function GET_WITH_PARAM(req: FastifyRequest, reply: FastifyReply) {
 
   const user = rows[0];
   if (user.id !== req.user?.id && !isAdminOrTeacher(user)) {
-    reply.code(404).send();
+    reply.code(401).send();
   }
 
   return user;
