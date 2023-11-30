@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { isAuthenticated } from "../../middlewares/auth";
-import { GET, GET_WITH_PARAM, POST } from "./courses.controller";
+import { GET, GET_WITH_PARAMS, POST } from "./courses.controller";
 import { $ref } from "./courses.schema";
 
 export default async function coursesRoute(route: FastifyInstance) {
@@ -12,8 +12,9 @@ export default async function coursesRoute(route: FastifyInstance) {
       schema: {
         params: $ref("courseParams"),
       },
+      preHandler: isAuthenticated
     },
-    GET_WITH_PARAM
+    GET_WITH_PARAMS
   );
 
   route.post(
@@ -22,6 +23,7 @@ export default async function coursesRoute(route: FastifyInstance) {
       schema: {
         body: $ref("createCourseSchema"),
       },
+      preHandler: isAuthenticated
     },
     POST
   );
