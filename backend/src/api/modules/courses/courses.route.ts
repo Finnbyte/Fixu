@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { isAuthenticated } from "../../middlewares/users";
+import { isAuthenticated } from "../../middlewares/auth";
 import { GET, GET_WITH_PARAM, POST } from "./courses.controller";
 import { $ref } from "./courses.schema";
 
