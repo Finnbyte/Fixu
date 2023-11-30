@@ -43,5 +43,4 @@ export const isAuthenticated = async (req: FastifyRequest, reply: FastifyReply, 
 
   req.user = user!;
   done();
-
 };
