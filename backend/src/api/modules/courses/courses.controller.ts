@@ -1,24 +1,24 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { db } from "../../..";
 import { courses } from "../../../../db/schemas/courses";
-import { eq, sql } from "drizzle-orm";
-import { CourseQueryString, CreateCourseInput } from "./courses.schema";
+import { eq } from "drizzle-orm";
+import { CreateCourseInput, courseQueryStringSchema } from "./courses.schema";
 
-export async function GET() {
-  return await db.select().from(courses);
+export async function GET(req: FastifyRequest) {
+  const queryStringParseResult = courseQueryStringSchema.safeParse(req.query);
+  if (!queryStringParseResult.success) {
+    return await db.select().from(courses);
+  }
+
+  const courseName = queryStringParseResult.data.name;
+  return await db.query.courses.findFirst({
+    where: eq(courses.name, courseName)
+  });
 }
 
 export async function GET_WITH_PARAM(req: FastifyRequest) {
   const { courseId } = req.params as { courseId: string };
   return await db.select().from(courses).where(eq(courses.id, courseId));
-}
-
-export async function GET_WITH_QUERYSTRING(req: FastifyRequest) {
-  const { name } = req.query as CourseQueryString;
-  return await db
-    .select()
-    .from(courses)
-    .where(sql`${courses.name} LIKE ${name}`);
 }
 
 export async function POST(req: FastifyRequest, reply: FastifyReply) {
