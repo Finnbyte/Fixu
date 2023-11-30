@@ -1,36 +1,37 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { db } from "../../..";
-import { courses } from "../../../../db/schemas/courses";
-import { eq } from "drizzle-orm";
-import { CreateCourseInput, courseQueryStringSchema } from "./courses.schema";
+import { CourseParams, CreateCourseInput, courseQueryStringSchema } from "./courses.schema";
+import { createCourse, fetchAllCourses, fetchCourseByName } from "./courses.service";
 
 export async function GET(req: FastifyRequest) {
   const queryStringParseResult = courseQueryStringSchema.safeParse(req.query);
   if (!queryStringParseResult.success) {
-    return await db.select().from(courses);
+    const courses = await fetchAllCourses();
+    return courses;
   }
 
   const courseName = queryStringParseResult.data.name;
-  return await db.query.courses.findFirst({
-    where: eq(courses.name, courseName)
-  });
+
+  const course = await fetchCourseByName(courseName);
+  return course;
 }
 
 export async function GET_WITH_PARAM(req: FastifyRequest) {
-  const { courseId } = req.params as { courseId: string };
-  return await db.select().from(courses).where(eq(courses.id, courseId));
+  const { courseId } = req.params as CourseParams;
+
+  const course = await fetchCourseByName(courseId);
+  return course;
 }
 
 export async function POST(req: FastifyRequest, reply: FastifyReply) {
   const { name, description } = req.body as CreateCourseInput;
   const creationTime = new Date();
 
-  const isUniqueCourse = await db.query.courses.findFirst({ where: eq(courses.name, name)}) === undefined;
+  const isUniqueCourse = await fetchCourseByName(name) === undefined;
   if (!isUniqueCourse) {
     reply.code(409);
     return { msg: "Course with same name already exists" };
   }
 
-  await db.insert(courses).values({ name, description, createdAt: creationTime });
+  await createCourse({ name, description, createdAt: creationTime });
   return reply.code(200).send();
 }

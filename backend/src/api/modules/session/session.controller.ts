@@ -1,10 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { LoginInput } from "./session.schema";
-import { eq } from "drizzle-orm";
-import bcrypt from "bcrypt";
-import { db } from "../../..";
-import { users } from "../../../../db/schemas/users";
 import { signJwtToken } from "../../../utils/token";
+import { fetchUserByEmail } from "../users/users.service";
+import bcrypt from "bcrypt";
 
 export async function GET(req: FastifyRequest) {
   return req.user.id;
@@ -13,17 +11,16 @@ export async function GET(req: FastifyRequest) {
 export async function POST(req: FastifyRequest, reply: FastifyReply) {
   const { email, password } = req.body as LoginInput;
 
-  const rows = await db.select().from(users).where(eq(users.email, email));
-  if (!rows.length) {
-    reply.code(401).send();
+  const user = await fetchUserByEmail(email);
+  if (!user) {
+    reply.code(401);
+    return { msg: "Incorrect credentials" };
   }
 
-  const user = rows[0];
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-  console.log(hashedPassword);
-  if (await bcrypt.compare(user.password, hashedPassword)) {
-    reply.code(401).send();
+  const isCorrectPassword = await bcrypt.compare(password, user.password);
+  if (!isCorrectPassword) {
+    reply.code(401);
+    return { msg: "Incorrect credentials" };
   }
 
   const token = signJwtToken({ userId: user.id as string });
