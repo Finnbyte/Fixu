@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Finnbyte/Fixu#readme",
   "dependencies": {
+    "@fastify/cookie": "^9.2.0",
     "@paralleldrive/cuid2": "^2.2.2",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.5",
