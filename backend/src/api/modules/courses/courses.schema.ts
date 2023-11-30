@@ -19,4 +19,6 @@ export const { schemas: coursesSchemas, $ref } = buildJsonSchemas({
 });
 
 export type CourseQueryString = z.infer<typeof courseQueryStringSchema>
+export type CourseParams = z.infer<typeof courseParams>
 export type CreateCourseInput = z.infer<typeof createCourseSchema>
+export type CreateCourseFull = z.infer<typeof insertCourseSchema>
