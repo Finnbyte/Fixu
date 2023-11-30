@@ -1,6 +1,6 @@
 import { formatDuration, intervalToDuration } from "date-fns";
 
-export function uptime(start: Date, until: Date): string {
-  const uptimeDuration = intervalToDuration({ start, end: until });
+export function formatUptime(uptimeInSeconds: number): string {
+  const uptimeDuration = intervalToDuration({ start: 0, end: uptimeInSeconds * 1000 });
   return formatDuration(uptimeDuration);
 }
