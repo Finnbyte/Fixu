@@ -5,6 +5,7 @@ import usersRoute from "./api/modules/users/users.route";
 import { usersSchemas } from "./api/modules/users/users.schema";
 import { formatUptime } from "./utils/uptime";
 import { customErrorHandler } from "./api/errorHandler";
+import coursesRoute from "./api/modules/courses/courses.route";
 
 export function serverBuilder() {
   const server = Fastify({
@@ -27,6 +28,7 @@ export function serverBuilder() {
 
   server.register(usersRoute, { prefix: "api/users" });
   server.register(sessionRoute, { prefix: "api/session" });
+  server.register(coursesRoute, { prefix: "api/courses" });
 
   server.setErrorHandler(customErrorHandler);
 
