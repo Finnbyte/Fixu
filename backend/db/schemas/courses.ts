@@ -1,5 +1,5 @@
 import { boolean, date, mysqlTable, text, varchar } from "drizzle-orm/mysql-core";
-import { CUID_LENGTH, cuidId } from "../common";
+import { MAX_CUID_LENGTH, cuidId } from "../common";
 import { users } from "./users";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -14,8 +14,8 @@ export const courses = mysqlTable("courses", {
 
 export const usersCourses = mysqlTable("users_courses", {
   id: cuidId(),
-  userId: varchar("user_id", { length: CUID_LENGTH }).references(() => users.id),
-  courseId: varchar("course_id", { length: CUID_LENGTH }).references(() => courses.id),
+  userId: varchar("user_id", { length: MAX_CUID_LENGTH }).references(() => users.id),
+  courseId: varchar("course_id", { length: MAX_CUID_LENGTH }).references(() => courses.id),
   isTeaching: boolean("is_teaching")
 });
 

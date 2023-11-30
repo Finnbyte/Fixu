@@ -1,14 +1,14 @@
 import { buildJsonSchemas } from "fastify-zod";
 import { insertUserSchema, selectUserSchema } from "../../../../db/schemas/users";
 import { z } from "zod";
-import { CUID_LENGTH } from "../../../../db/common";
+import { MAX_CUID_LENGTH } from "../../../../db/common";
 
 /**
  * 8-length and at least one uppercase, lowercase, digit and special character.
  */
 const strongPasswordRegex = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
 
-const userIdSchema = z.string().max(CUID_LENGTH);
+const userIdSchema = z.string().max(MAX_CUID_LENGTH);
 
 const registerSchema = insertUserSchema
   .omit({ id: true, privilege: true })
