@@ -20,6 +20,8 @@ function databaseConnectionBuilder(): Connection {
   }
 }
 
+export const SALT = 10;
+
 export const db = drizzle(databaseConnectionBuilder(), { schema: schemas, mode: "default" });
 
 
