@@ -8,7 +8,7 @@ export async function fetchAllCourses() {
 }
 
 export async function fetchCourseByName(courseName: string) {
-  const course = await db.query.courses.findMany({
+  const course = await db.query.courses.findFirst({
     where: eq(courses.name, courseName),
   });
 
@@ -16,7 +16,7 @@ export async function fetchCourseByName(courseName: string) {
 }
 
 export async function fetchCourseById(courseId: string) {
-  const course = await db.query.courses.findMany({
+  const course = await db.query.courses.findFirst({
     where: eq(courses.id, courseId),
   });
 
