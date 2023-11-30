@@ -25,11 +25,15 @@ export async function POST(req: FastifyRequest, reply: FastifyReply) {
 
   const token = signJwtToken({ userId: user.id as string });
 
-  reply.header("Set-Cookie", `Authorization=Bearer ${token};HttpOnly`);
+  reply.cookie("Authorization", `Bearer ${token}`, {
+    httpOnly: true,
+  });
   reply.code(204).send();
 }
 
 export async function DELETE(req: FastifyRequest, reply: FastifyReply) {
-  reply.header("Set-Cookie", "Authorization=deleted;HttpOnly;Max-Age=-1");
+  reply.clearCookie("Authorization", {
+    httpOnly: true
+  });
   reply.code(204).send();
 }
