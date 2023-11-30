@@ -10,8 +10,10 @@ import { coursesSchemas } from "./api/modules/courses/courses.schema";
 
 export function serverBuilder() {
   const server = Fastify({
-    logger: false,
+    logger: true,
   });
+
+  server.setErrorHandler(customErrorHandler);
 
   server.get("/healthcheck", () => {
     const uptimeInSeconds = process.uptime();
@@ -30,8 +32,6 @@ export function serverBuilder() {
   server.register(usersRoute, { prefix: "api/users" });
   server.register(sessionRoute, { prefix: "api/session" });
   server.register(coursesRoute, { prefix: "api/courses" });
-
-  server.setErrorHandler(customErrorHandler);
 
   return server;
 }
