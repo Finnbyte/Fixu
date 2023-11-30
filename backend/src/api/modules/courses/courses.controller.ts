@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CourseParams, CreateCourseInput, courseQueryStringSchema } from "./courses.schema";
-import { createCourse, fetchAllCourses, fetchCourseByName } from "./courses.service";
+import { createCourse, fetchAllCourses, fetchCourseById, fetchCourseByName } from "./courses.service";
 
 export async function GET(req: FastifyRequest) {
   const queryStringParseResult = courseQueryStringSchema.safeParse(req.query);
@@ -15,10 +15,10 @@ export async function GET(req: FastifyRequest) {
   return course;
 }
 
-export async function GET_WITH_PARAM(req: FastifyRequest) {
+export async function GET_WITH_PARAMS(req: FastifyRequest) {
   const { courseId } = req.params as CourseParams;
 
-  const course = await fetchCourseByName(courseId);
+  const course = await fetchCourseById(courseId);
   return course;
 }
 
