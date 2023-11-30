@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateUserInput, User } from "./users.schema";
+import { CreateUserInput, User, UserParams } from "./users.schema";
 import bcrypt from "bcrypt";
 import { createUser, fetchAllUsers, fetchUserByEmail, fetchUserById } from "./users.service";
 import { SALT } from "../../..";
@@ -15,7 +15,7 @@ export async function GET() {
 }
 
 export async function GET_WITH_PARAM(req: FastifyRequest, reply: FastifyReply) {
-  const userId = req.params as string;
+  const { userId } = req.params as UserParams;
 
   const user = await fetchUserById(userId);
   if (!user) {

@@ -1,14 +1,12 @@
 import { buildJsonSchemas } from "fastify-zod";
 import { insertUserSchema, selectUserSchema } from "../../../../db/schemas/users";
 import { z } from "zod";
-import { MAX_CUID_LENGTH } from "../../../../db/common";
+import { cuidSchema } from "../../../../db/common";
 
 /**
  * 8-length and at least one uppercase, lowercase, digit and special character.
  */
 const strongPasswordRegex = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
-
-const userIdSchema = z.string().max(MAX_CUID_LENGTH);
 
 const registerSchema = insertUserSchema
   .omit({ id: true, privilege: true })
@@ -19,10 +17,16 @@ const registerSchema = insertUserSchema
     })
   );
 
-export type CreateUserInput = z.infer<typeof insertUserSchema>;
-export type User = z.infer<typeof selectUserSchema>;
+const userParams = z.object({
+  userId: cuidSchema
+});
+
+export type CreateUserInput = z.infer<typeof insertUserSchema>
+export type User = z.infer<typeof selectUserSchema>
+export type UserParams = z.infer<typeof userParams>
 
 export const { schemas: usersSchemas, $ref } = buildJsonSchemas({
   registerSchema,
-  userIdSchema
+  userParams,
+  cuidSchema
 }, { $id: "usersSchemas" });
