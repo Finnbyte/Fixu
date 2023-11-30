@@ -7,10 +7,17 @@ import { formatUptime } from "./utils/uptime";
 import { customErrorHandler } from "./api/errorHandler";
 import coursesRoute from "./api/modules/courses/courses.route";
 import { coursesSchemas } from "./api/modules/courses/courses.schema";
+import fastifyCookie from "@fastify/cookie";
 
 export function serverBuilder() {
   const server = Fastify({
     logger: true,
+  });
+
+  server.register(fastifyCookie, {
+    secret: "fixu", // for cookies signature
+    hook: "onRequest", // set to false to disable cookie autoparsing or set autoparsing on any of the following hooks: 'onRequest', 'preParsing', 'preHandler', 'preValidation'. default: 'onRequest'
+    parseOptions: {}, // options for parsing cookies
   });
 
   server.setErrorHandler(customErrorHandler);
