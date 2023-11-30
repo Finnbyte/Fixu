@@ -1,8 +1,7 @@
 import { FastifyInstance } from "fastify";
-import { cuidSchema } from "../../../../db/common";
 import { isAuthenticated } from "../../middlewares/users";
 import { GET, GET_WITH_PARAM, POST } from "./courses.controller";
-import { $ref, courseParams } from "./courses.schema";
+import { $ref } from "./courses.schema";
 
 export default async function coursesRoute(route: FastifyInstance) {
   route.get("/", { preHandler: isAuthenticated }, GET);
