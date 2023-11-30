@@ -6,6 +6,7 @@ import { usersSchemas } from "./api/modules/users/users.schema";
 import { formatUptime } from "./utils/uptime";
 import { customErrorHandler } from "./api/errorHandler";
 import coursesRoute from "./api/modules/courses/courses.route";
+import { coursesSchemas } from "./api/modules/courses/courses.schema";
 
 export function serverBuilder() {
   const server = Fastify({
@@ -22,7 +23,7 @@ export function serverBuilder() {
 
   server.decorateRequest("user", null);
 
-  for (const schema of [...sessionSchemas, ...usersSchemas]) {
+  for (const schema of [...sessionSchemas, ...usersSchemas, ...coursesSchemas]) {
     server.addSchema(schema);
   }
 
