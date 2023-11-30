@@ -1,11 +1,11 @@
-import { createId } from "@paralleldrive/cuid2";
+import { createId, isCuid } from "@paralleldrive/cuid2";
 import { varchar } from "drizzle-orm/mysql-core";
 import { z } from "zod";
 
-export const CUID_LENGTH = 32;
+export const MAX_CUID_LENGTH = 32;
 
 export function cuidId() {
-  return varchar("id", { length: CUID_LENGTH }).$defaultFn(() => createId());
+  return varchar("id", { length: MAX_CUID_LENGTH }).$defaultFn(() => createId());
 }
 
-export const cuidSchema = z.string().max(CUID_LENGTH);
+export const cuidSchema = z.string().refine(s => isCuid(s));
