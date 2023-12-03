@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom/client'
 import { RouteObject, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Login from './pages/login/Login.tsx';
 import Register from './pages/register/Register.tsx';
-import AuthenticatedView from './components/AuthenticatedView/AuthenticatedView.tsx';
 import Root from './pages/root/Root.tsx';
 import Courses from './pages/courses/Courses.tsx';
 import Home from './pages/home/Home.tsx';
-import "./index.css";
+import "./index.scss";
+import { AuthGuard } from './components/AuthGuard/AuthGuard.tsx';
 
 export const ROUTES: RouteObject[] = [
   {
@@ -16,7 +16,9 @@ export const ROUTES: RouteObject[] = [
   },
   {
     path: "/app",
-    element: <AuthenticatedView />,
+    element: (
+      <AuthGuard />
+    ),
     children: [
       {
         element: <Home />,
