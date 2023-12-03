@@ -1,0 +1,4 @@
+@use "sass:color";
+
+$surface: #9BC4BC;
+$surface-variant: color.scale($surface, $lightness: -74%);
