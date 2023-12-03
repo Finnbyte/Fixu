@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 
 export async function GET(req: FastifyRequest) {
   return req.user.id;
+  return { userId: req.user.id };
 }
 
 export async function POST(req: FastifyRequest, reply: FastifyReply) {
