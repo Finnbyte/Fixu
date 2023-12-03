@@ -1,8 +1,18 @@
 import { Outlet } from "react-router-dom";
 import styles from "./AuthenticatedView.module.scss";
 import Navbar from "../Navbar/Navbar"
+import { useUserStore } from "../../store/user";
+import { useEffect } from "react";
 
-export default function AuthenticatedView() {
+interface IAuthenticatedViewProps {
+  userId: string
+}
+
+export default function AuthenticatedView({ userId }: IAuthenticatedViewProps) {
+  const user = useUserStore();
+  useEffect(() => {
+    user.fetch(userId);
+  }, [userId])
   return (
     <div className={styles.container}>
       <Navbar /> 
