@@ -3,11 +3,11 @@ import sessionRoute from "./api/modules/session/session.route";
 import { sessionSchemas } from "./api/modules/session/session.schema";
 import usersRoute from "./api/modules/users/users.route";
 import { usersSchemas } from "./api/modules/users/users.schema";
-import { formatUptime } from "./utils/uptime";
 import { customErrorHandler } from "./api/errorHandler";
 import coursesRoute from "./api/modules/courses/courses.route";
 import { coursesSchemas } from "./api/modules/courses/courses.schema";
 import fastifyCookie from "@fastify/cookie";
+import healthcheckRoute from "./api/modules/healthcheck/healthcheck.route";
 
 export function serverBuilder() {
   const server = Fastify({
@@ -22,20 +22,13 @@ export function serverBuilder() {
 
   server.setErrorHandler(customErrorHandler);
 
-  server.get("/healthcheck", () => {
-    const uptimeInSeconds = process.uptime();
-    return {
-      msg: "I am alive.",
-      uptime: formatUptime(uptimeInSeconds),
-    };
-  });
-
   server.decorateRequest("user", null);
 
   for (const schema of [...sessionSchemas, ...usersSchemas, ...coursesSchemas]) {
     server.addSchema(schema);
   }
 
+  server.register(healthcheckRoute, { prefix: "healthcheck" });
   server.register(usersRoute, { prefix: "api/users" });
   server.register(sessionRoute, { prefix: "api/session" });
   server.register(coursesRoute, { prefix: "api/courses" });
