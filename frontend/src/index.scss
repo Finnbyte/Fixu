@@ -7,6 +7,14 @@ body {
     margin: 0; 
     padding: 0;
     font-family: "Inter";
+
+    input {
+        outline: none;
+    }
+    
+    span, label, p, h1, h2, h3, h4 {
+        color: white;
+    }
 }
 
 #root {
