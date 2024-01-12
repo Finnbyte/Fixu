@@ -10,7 +10,7 @@ function databaseConnectionBuilder(): Connection {
   try {
     const connection = mysql.createConnection({
       host: "localhost",
-      user: process.env.USERNAME ?? "root",
+      user: process.env.DATABASE_USER ?? "root",
       database: process.env.DATABASE ?? "fixu"
     });
     return connection;
