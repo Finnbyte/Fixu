@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./Login.module.scss";
 
 interface ILoginInputs {
@@ -56,12 +56,15 @@ export default function Login() {
           </label>
 
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <button type="submit" className={styles["login-btn"]}>Login</button>
+            <button type="submit" className={styles["login-btn"]}>
+              Login
+            </button>
           </div>
 
           <span color="red">{errors.root && errors.root.message}</span>
         </form>
       </div>
+      <Link to="/register">Don't have an account?</Link>
     </div>
   );
 }

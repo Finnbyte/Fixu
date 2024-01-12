@@ -26,7 +26,6 @@
 
 .login-container {
     display: flex;
-    justify-content: space-between;
     background-color: color.adjust(white, $blackness: 15%);
     width: 30%;
     height: 20rem;
@@ -39,7 +38,7 @@
         display: flex;
         width: 100%;
         flex-direction: column;
-        justify-content: space-between;
+        gap: 2rem;
         margin: 2rem;
 
         label {
@@ -53,7 +52,7 @@
         }
 
         input {
-            padding: 0.5rem;
+            padding: 0.7rem;
         }
     }
 
