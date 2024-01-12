@@ -8,6 +8,8 @@ import Courses from './pages/courses/Courses.tsx';
 import Home from './pages/home/Home.tsx';
 import "./index.scss";
 import { AuthGuard } from './components/AuthGuard/AuthGuard.tsx';
+import Settings from './pages/settings/Settings.tsx';
+import Calendar from './pages/calendar/Calendar.tsx';
 
 export const ROUTES: RouteObject[] = [
   {
@@ -27,6 +29,14 @@ export const ROUTES: RouteObject[] = [
       {
         path: "courses",
         element: <Courses />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
+      },
+      {
+        path: "calendar",
+        element: <Calendar />,
       },
     ],
   },
