@@ -38,8 +38,12 @@
         display: flex;
         width: 100%;
         flex-direction: column;
-        gap: 2rem;
-        margin: 2rem;
+        justify-content: space-between;
+        padding: 2rem;
+
+        a {
+            text-align: center;
+        }
 
         label {
             display: flex;
