@@ -25,9 +25,11 @@
 }
 
 .login-container {
+    display: flex;
+    justify-content: space-between;
     background-color: color.adjust(white, $blackness: 15%);
     width: 30%;
-    height: 30%;
+    height: 20rem;
 
     & * {
         color: black;
@@ -35,8 +37,9 @@
 
     form {
         display: flex;
+        width: 100%;
         flex-direction: column;
-        gap: 1rem;
+        justify-content: space-between;
         margin: 2rem;
 
         label {
