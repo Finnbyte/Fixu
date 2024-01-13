@@ -13,7 +13,6 @@ export const courses = mysqlTable("courses", {
 });
 
 export const usersCourses = mysqlTable("users_courses", {
-  id: cuidId(),
   userId: varchar("user_id", { length: MAX_CUID_LENGTH }).references(() => users.id),
   courseId: varchar("course_id", { length: MAX_CUID_LENGTH }).references(() => courses.id),
   isTeaching: boolean("is_teaching")
