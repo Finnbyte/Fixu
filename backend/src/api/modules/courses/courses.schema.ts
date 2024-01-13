@@ -13,8 +13,14 @@ export const courseParams = z.object({
   courseId: cuidSchema
 });
 
+export const createCourseUserSchema = z.object({
+  userId: cuidSchema,
+  isTeacher: z.boolean()
+});
+
 export const { schemas: coursesSchemas, $ref } = buildJsonSchemas({
   createCourseSchema,
+  addStudentToCourseSchema: createCourseUserSchema,
   courseParams
 });
 
@@ -22,3 +28,4 @@ export type CourseQueryString = z.infer<typeof courseQueryStringSchema>
 export type CourseParams = z.infer<typeof courseParams>
 export type CreateCourseInput = z.infer<typeof createCourseSchema>
 export type CreateCourseFull = z.infer<typeof insertCourseSchema>
+export type CreateCourseUser = z.infer<typeof createCourseUserSchema>

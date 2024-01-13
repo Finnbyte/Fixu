@@ -4,7 +4,9 @@ import { cuidId } from "../common";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const privilegeEnum = mysqlEnum("privilege", ["student", "teacher", "admin"]);
+export const userPrivileges = ["student", "teacher", "admin"] as const;
+
+export const privilegeEnum = mysqlEnum("privilege", userPrivileges);
 
 export const users = mysqlTable("users", {
   id: cuidId(),
@@ -19,3 +21,4 @@ export const selectUserSchema = createSelectSchema(users);
 export const insertUserSchema = createInsertSchema(users);
 
 export type User = z.infer<typeof selectUserSchema>;
+export type UserPrivilege = typeof userPrivileges[keyof typeof userPrivileges]
