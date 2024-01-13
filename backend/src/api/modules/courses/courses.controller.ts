@@ -25,6 +25,12 @@ export async function getCourseHandler(req: FastifyRequest) {
 export async function createCourseUserHandler(req: FastifyRequest, reply: FastifyReply) {
 export async function listCourseUsersHandler(req: FastifyRequest) {
   const { courseId } =  req.params as CourseParams;
+  const courseUsers = await fetchCourseUsers(courseId);
+  console.log(courseUsers);
+
+  return courseUsers;
+}
+
 export async function createCourseHandler(req: FastifyRequest, reply: FastifyReply) {
   const { name, description } = req.body as CreateCourseInput;
   const creationTime = new Date();
