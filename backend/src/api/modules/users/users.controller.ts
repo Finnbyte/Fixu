@@ -9,12 +9,12 @@ function isAdminOrTeacher(user: User) {
   return privilege === "admin" || privilege === "teacher";
 }
 
-export async function GET() {
+export async function getUsersHandler() {
   const users = await fetchAllUsers();
   return users;
 }
 
-export async function GET_WITH_PARAM(req: FastifyRequest, reply: FastifyReply) {
+export async function getUserByIdHandler(req: FastifyRequest, reply: FastifyReply) {
   const { userId } = req.params as UserParams;
 
   const user = await fetchUserById(userId);
@@ -29,7 +29,7 @@ export async function GET_WITH_PARAM(req: FastifyRequest, reply: FastifyReply) {
   return user;
 }
 
-export async function POST(req: FastifyRequest, reply: FastifyReply) {
+export async function createUserHandler(req: FastifyRequest, reply: FastifyReply) {
   const { password, ...user } = req.body as CreateUserInput;
 
   const isDuplicateEmail = await fetchUserByEmail(user.email) !== undefined;

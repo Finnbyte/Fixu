@@ -1,10 +1,10 @@
 import { isAuthenticated, isStaff } from "../../middlewares/auth";
 import { FastifyInstance } from "fastify";
 import { $ref } from "./users.schema";
-import { GET, GET_WITH_PARAM, POST } from "./users.controller";
+import { getUsersHandler, getUserByIdHandler, createUserHandler } from "./users.controller";
 
 export default async function usersRoute(route: FastifyInstance) {
-  route.get("/", { preHandler: isStaff }, GET);
+  route.get("/", { preHandler: isStaff }, getUsersHandler);
 
   route.get(
     "/:userId",
@@ -14,7 +14,7 @@ export default async function usersRoute(route: FastifyInstance) {
         params: $ref("userParams"),
       },
     },
-    GET_WITH_PARAM
+    getUserByIdHandler
   );
 
   route.post(
@@ -24,6 +24,6 @@ export default async function usersRoute(route: FastifyInstance) {
         body: $ref("registerSchema"),
       },
     },
-    POST
+    createUserHandler
   );
 }

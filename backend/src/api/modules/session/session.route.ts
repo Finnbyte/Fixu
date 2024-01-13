@@ -1,10 +1,10 @@
 import { FastifyInstance } from "fastify";
 import { $ref } from "./session.schema";
-import { DELETE, GET, POST } from "./session.controller";
+import { deleteSessionHandler, getSessionHandler, createSessionHandler } from "./session.controller";
 import { isAuthenticated } from "../../middlewares/auth";
 
 export default async function sessionRoute(route: FastifyInstance) {
-  route.get("/", { preHandler: isAuthenticated }, GET);
+  route.get("/", { preHandler: isAuthenticated }, getSessionHandler);
 
   route.post(
     "/",
@@ -13,8 +13,8 @@ export default async function sessionRoute(route: FastifyInstance) {
         body: $ref("loginSchema"),
       },
     },
-    POST
+    createSessionHandler
   );
 
-  route.delete("/", DELETE);
+  route.delete("/", deleteSessionHandler);
 }
