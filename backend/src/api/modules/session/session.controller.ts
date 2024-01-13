@@ -4,11 +4,11 @@ import { signJwtToken } from "../../../utils/token";
 import { fetchUserByEmail } from "../users/users.service";
 import bcrypt from "bcrypt";
 
-export async function GET(req: FastifyRequest) {
+export async function getSessionHandler(req: FastifyRequest) {
   return { userId: req.user.id };
 }
 
-export async function POST(req: FastifyRequest, reply: FastifyReply) {
+export async function createSessionHandler(req: FastifyRequest, reply: FastifyReply) {
   const { email, password } = req.body as LoginInput;
 
   const user = await fetchUserByEmail(email);
@@ -31,7 +31,7 @@ export async function POST(req: FastifyRequest, reply: FastifyReply) {
   reply.code(204).send();
 }
 
-export async function DELETE(req: FastifyRequest, reply: FastifyReply) {
+export async function deleteSessionHandler(req: FastifyRequest, reply: FastifyReply) {
   reply.cookie("Authorization", "deleted", {
     maxAge: -1,
     httpOnly: true

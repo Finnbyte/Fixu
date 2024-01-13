@@ -5,7 +5,7 @@ export function formatUptime(uptimeInSeconds: number): string {
   return formatDuration(uptimeDuration);
 }
 
-export function GET() {
+export function getUptimeHandler() {
   const uptimeInSeconds = process.uptime();
   return {
     msg: "I am alive.",
