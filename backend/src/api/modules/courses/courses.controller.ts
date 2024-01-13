@@ -48,13 +48,14 @@ export async function listCourseUsersHandler(req: FastifyRequest) {
 
 export async function createCourseHandler(req: FastifyRequest, reply: FastifyReply) {
   const { name, description } = req.body as CreateCourseInput;
-  const creationTime = new Date();
 
   const isUniqueCourse = await fetchCourseByName(name) === undefined;
   if (!isUniqueCourse) {
     reply.code(409);
     return { msg: "Course with same name already exists" };
   }
+
+  const creationTime = new Date();
 
   await createCourse({ name, description, createdAt: creationTime });
   return reply.code(200).send();
