@@ -17,6 +17,27 @@ export default async function coursesRoute(route: FastifyInstance) {
     getCourseHandler
   );
 
+  route.post(
+    "/:courseId/students",
+    {
+      schema: {
+        params: $ref("courseParams"),
+        body: $ref("addStudentToCourseSchema")
+      },
+      preHandler: isAuthenticated
+    },
+    createCourseUserHandler
+  );
+
+  route.get(
+    "/:courseId/students",
+    {
+      schema: {
+        params: $ref("courseParams")
+      }
+    },
+    listCourseUsersHandler
+  );
 
   route.post(
     "/",
