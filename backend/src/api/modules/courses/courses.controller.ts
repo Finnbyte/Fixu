@@ -23,6 +23,21 @@ export async function getCourseHandler(req: FastifyRequest) {
 }
 
 export async function createCourseUserHandler(req: FastifyRequest, reply: FastifyReply) {
+  const { courseId } = req.params as CourseParams;
+  const { userId, isTeacher } = req.body as CreateCourseUser;
+  
+  const user = req.user;
+  const hasTeacherPerms = user.privilege === "admin" || user.privilege === "teacher";
+
+  if ((isTeacher && user.id !== userId) && !hasTeacherPerms) {
+    reply.code(401);
+    return { msg: "No authorization to add other users into course" };
+  }
+
+  await createCourseUser(courseId, userId, isTeacher);
+  return reply.code(200).send();
+}
+
 export async function listCourseUsersHandler(req: FastifyRequest) {
   const { courseId } =  req.params as CourseParams;
   const courseUsers = await fetchCourseUsers(courseId);
