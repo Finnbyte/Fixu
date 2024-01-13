@@ -1,4 +1,4 @@
-import { NavLink, NavLinkProps } from "react-router-dom";
+import { NavLink, NavLinkProps, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.scss";
 import { CalendarMonth, Home, LibraryBooks, Logout, Settings } from "@mui/icons-material";
 import { User } from "../../../../backend/db/schemas/users";
@@ -22,6 +22,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     await fetch("/api/session", { method: "DELETE", credentials: "include" });
+    location.reload();
   };
 
   return (
