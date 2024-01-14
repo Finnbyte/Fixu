@@ -4,6 +4,7 @@
 #navbar {
     display: flex;
     width: 300px;
+    min-height: 300px;
     background-color: colors.$surface-variant;
 
     $padding-left: 0.9rem;
