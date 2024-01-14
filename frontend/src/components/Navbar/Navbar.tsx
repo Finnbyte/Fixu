@@ -1,7 +1,6 @@
 import { NavLink, NavLinkProps, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.scss";
-import { CalendarMonth, Home, LibraryBooks, Logout, Settings } from "@mui/icons-material";
-import { User } from "../../../../backend/db/schemas/users";
+import { CalendarMonth, Dashboard, LibraryBooks, Logout, Settings } from "@mui/icons-material";
 import { useUserStore } from "../../store/user";
 
 function CustomNavLink(props: NavLinkProps) {
@@ -29,7 +28,7 @@ export default function Navbar() {
   return (
     <nav id={styles.navbar}>
       <CustomNavLink to={"/app"} end>
-        <Home fill="white" /> Home
+        <Dashboard fill="white" /> Dashboard
       </CustomNavLink>
 
       <CustomNavLink to={"/app/courses"}>
