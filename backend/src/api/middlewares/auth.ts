@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { ITokenPayload, verifyJwtToken } from "../../utils/token";
 import { fetchUserById } from "../modules/users/users.service";
 
@@ -20,7 +20,6 @@ async function getTokenPayloadFromHeader(
 export async function isStaff(
   req: FastifyRequest,
   reply: FastifyReply,
-  done: HookHandlerDoneFunction
 ) {
   const tokenPayload = await getTokenPayloadFromHeader(req);
   if (!tokenPayload) {
@@ -35,13 +34,11 @@ export async function isStaff(
   }
 
   req.user = user!;
-  done();
 }
 
 export const isAuthenticated = async (
   req: FastifyRequest,
   reply: FastifyReply,
-  done: HookHandlerDoneFunction
 ) => {
   const tokenPayload = await getTokenPayloadFromHeader(req);
   if (!tokenPayload) {
@@ -54,5 +51,4 @@ export const isAuthenticated = async (
   }
 
   req.user = user!;
-  done();
 };
