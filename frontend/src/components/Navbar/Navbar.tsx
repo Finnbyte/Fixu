@@ -19,10 +19,11 @@ export default function Navbar() {
     lastName: state.data?.lastName,
     email: state.data?.email,
   }));
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     await fetch("/api/session", { method: "DELETE", credentials: "include" });
-    location.reload();
+    navigate("/login");
   };
 
   return (
