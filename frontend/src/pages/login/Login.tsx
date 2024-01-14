@@ -62,7 +62,7 @@ export default function Login() {
           </div>
 
           <span color="red">{errors.root && errors.root.message}</span>
-      <Link to="/register">Don't have an account?</Link>
+          <Link to="/register">Don't have an account?</Link>
         </form>
       </div>
     </div>
