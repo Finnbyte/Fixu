@@ -5,7 +5,7 @@ import Login from './pages/login/Login.tsx';
 import Register from './pages/register/Register.tsx';
 import Root from './pages/root/Root.tsx';
 import Courses from './pages/courses/Courses.tsx';
-import Home from './pages/home/Home.tsx';
+import Dashboard from './pages/dashboard/DashboardPage.tsx';
 import "./index.scss";
 import { AuthGuard } from './components/AuthGuard/AuthGuard.tsx';
 import Settings from './pages/settings/Settings.tsx';
@@ -23,7 +23,7 @@ export const ROUTES: RouteObject[] = [
     ),
     children: [
       {
-        element: <Home />,
+        element: <Dashboard />,
         index: true,
       },
       {
