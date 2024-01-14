@@ -2,13 +2,20 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
 import AuthenticatedView from "../AuthenticatedView/AuthenticatedView";
 
+function createRedirectURL(pathname: string) {
+  let URL = "/login";
+  if (pathname !== "/") {
+    URL += `?redirect_to=${pathname}`
+  }
+  return URL;
+}
+
 export function AuthGuard() {
   const { data, error } = useFetch<{ userId: string }>("/api/session", {
     method: "GET",
     credentials: "include",
   });
   const location = useLocation();
-  const intendedDestination = location.pathname;
 
   if (!data && !error) {
     return null;
@@ -16,9 +23,9 @@ export function AuthGuard() {
 
   if (!data && error) {
     console.log(error);
-    const url = `/login?redirect_to=${intendedDestination}`;
+    const redirectionURL = createRedirectURL(location.pathname);
 
-    return <Navigate to={url} replace />;
+    return <Navigate to={redirectionURL} replace />;
   }
 
   return <AuthenticatedView userId={data!.userId} />;
