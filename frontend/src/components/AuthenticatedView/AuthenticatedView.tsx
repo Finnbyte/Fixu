@@ -12,7 +12,7 @@ export default function AuthenticatedView({ userId }: IAuthenticatedViewProps) {
   const user = useUserStore();
   useEffect(() => {
     user.fetch(userId);
-  }, [userId])
+  }, [userId, user])
   return (
     <div className={styles.container}>
       <Navbar /> 
