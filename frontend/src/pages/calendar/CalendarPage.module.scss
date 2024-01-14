@@ -1,0 +1,47 @@
+@use "../../colors";
+
+.page {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .calendar-container {
+        display: flex;
+        padding: 2rem;
+        flex-direction: column;
+        width: 50%; height: 100%;
+    }
+
+    .top-row {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.events-listing {
+    width: 400px;
+    height: 100vh;
+    padding-top: 0;
+    background-color: lighten(colors.$surface, 10%);
+
+    * {
+        color: white;
+    }
+
+    .top-row {
+        font-size: larger;
+        padding: 2rem;
+        background-color: colors.$surface-variant;
+    }
+
+    input[type="text"] {
+        font-size: larger;
+        background: transparent;
+        outline: none;
+        border: none;
+    }
+
+    ul > li {
+        margin: 10px 0;
+    }
+}

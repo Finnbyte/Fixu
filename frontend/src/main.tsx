@@ -8,7 +8,7 @@ import Dashboard from './pages/dashboard/DashboardPage.tsx';
 import "./index.scss";
 import { AuthGuard } from './components/AuthGuard/AuthGuard.tsx';
 import Settings from './pages/settings/Settings.tsx';
-import Calendar from './pages/calendar/Calendar.tsx';
+import CalendarPage from './pages/calendar/CalendarPage.tsx';
 
 export const ROUTES: RouteObject[] = [
   {
@@ -35,7 +35,7 @@ export const ROUTES: RouteObject[] = [
       },
       {
         path: "calendar",
-        element: <Calendar />,
+        element: <CalendarPage />,
       },
     ],
   },
