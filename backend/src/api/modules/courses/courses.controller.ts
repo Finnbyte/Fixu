@@ -3,16 +3,17 @@ import { CreateCourseUser, CourseParams, CreateCourseInput, courseQueryStringSch
 import { createCourse, createCourseUser, fetchAllCourses, fetchCourseById, fetchCourseByName, fetchCourseUsers } from "./courses.service";
 
 export async function getCoursesHandler(req: FastifyRequest) {
-  const queryStringParseResult = courseQueryStringSchema.safeParse(req.query);
-  if (!queryStringParseResult.success) {
-    const courses = await fetchAllCourses();
-    return courses;
+  const result = courseQueryStringSchema.safeParse(req.query);
+  const isSearchingByName = result.success;
+  if (isSearchingByName) {
+    const courseName = result.data.name;
+
+    const course = await fetchCourseByName(courseName);
+    return course;
   }
 
-  const courseName = queryStringParseResult.data.name;
-
-  const course = await fetchCourseByName(courseName);
-  return course;
+  const courses = await fetchAllCourses();
+  return courses;
 }
 
 export async function getCourseHandler(req: FastifyRequest) {
