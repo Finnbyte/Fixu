@@ -1,7 +1,7 @@
 import { NavLink, NavLinkProps, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.scss";
 import { CalendarMonth, Dashboard, LibraryBooks, Logout, Settings } from "@mui/icons-material";
-import { useUserStore } from "../../store/user";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
 function CustomNavLink(props: NavLinkProps) {
   return (
@@ -13,11 +13,7 @@ function CustomNavLink(props: NavLinkProps) {
 }
 
 export default function Navbar() {
-  const { firstName, lastName, email } = useUserStore((state) => ({
-    firstName: state.data?.firstName,
-    lastName: state.data?.lastName,
-    email: state.data?.email,
-  }));
+  const { firstName, lastName, email } = useAppSelector(state => state.user.data!);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
