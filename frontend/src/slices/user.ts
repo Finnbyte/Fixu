@@ -21,11 +21,9 @@ interface UserState {
     error: SerializedError | null;
 }
 
-const initialState: UserState = { data: null, status: "idle", error: null };
-
 export const userSlice = createSlice({
   name: "user",
-  initialState,
+  initialState: { data: null, status: "idle", error: null } as UserState,
   reducers: {
     setUserData: (state, action: PayloadAction<User>) => {
       state.data = action.payload;
