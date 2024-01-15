@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./slices/user";
+import { calendarEventSlice } from "./slices/calendarEvent";
 
 export const store = configureStore({
   reducer: {
     user: userSlice.reducer,
+    calendarEvent: calendarEventSlice.reducer
   }
 });
 
