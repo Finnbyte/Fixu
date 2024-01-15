@@ -1,14 +1,16 @@
 import React from 'react'
+import "./index.scss";
 import ReactDOM from 'react-dom/client'
 import { RouteObject, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Login from './pages/login/Login.tsx';
 import Register from './pages/register/Register.tsx';
 import Courses from './pages/courses/Courses.tsx';
 import Dashboard from './pages/dashboard/DashboardPage.tsx';
-import "./index.scss";
 import { AuthGuard } from './components/AuthGuard/AuthGuard.tsx';
 import Settings from './pages/settings/Settings.tsx';
 import CalendarPage from './pages/calendar/CalendarPage.tsx';
+import { Provider } from 'react-redux';
+import { store } from './store.ts';
 
 export const ROUTES: RouteObject[] = [
   {
@@ -51,8 +53,10 @@ export const ROUTES: RouteObject[] = [
 
 const router = createBrowserRouter(ROUTES);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
-)
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </React.StrictMode>
+);
