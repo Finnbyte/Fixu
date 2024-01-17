@@ -48,7 +48,9 @@ export default function Navbar() {
           <p id={styles.email}>{email}</p>
         </div>
         <div onClick={handleLogout}>
-          <Logout className={styles["logout-button"]} />
+          <div className={styles["logout-button"]}>
+            <Logout  />
+          </div>
         </div>
       </div>
     </nav>
