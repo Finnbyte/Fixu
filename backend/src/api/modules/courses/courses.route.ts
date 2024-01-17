@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { isAuthenticated, isStaff } from "../../middlewares/auth";
-import { getCoursesHandler, getCourseHandler, createCourseHandler, createCourseUserHandler, listCourseUsersHandler } from "./courses.controller";
+import { getCoursesHandler, getCourseHandler, createCourseHandler, createCourseUserHandler, listCourseUsersHandler, getEnrolledCoursesHandler } from "./courses.controller";
 import { $ref } from "./courses.schema";
 
 export default async function coursesRoute(route: FastifyInstance) {
@@ -12,7 +12,7 @@ export default async function coursesRoute(route: FastifyInstance) {
       schema: {
         body: $ref("createCourseSchema"),
       },
-      preHandler: isAuthenticated
+      preHandler: isAuthenticated,
     },
     createCourseHandler
   );
@@ -23,7 +23,7 @@ export default async function coursesRoute(route: FastifyInstance) {
       schema: {
         params: $ref("courseParams"),
       },
-      preHandler: isAuthenticated
+      preHandler: isAuthenticated,
     },
     getCourseHandler
   );
@@ -33,9 +33,9 @@ export default async function coursesRoute(route: FastifyInstance) {
     {
       schema: {
         params: $ref("courseParams"),
-        body: $ref("addStudentToCourseSchema")
+        body: $ref("addStudentToCourseSchema"),
       },
-      preHandler: isAuthenticated
+      preHandler: isAuthenticated,
     },
     createCourseUserHandler
   );
@@ -44,10 +44,21 @@ export default async function coursesRoute(route: FastifyInstance) {
     "/:courseId/users",
     {
       schema: {
-        params: $ref("courseParams")
+        params: $ref("courseParams"),
       },
-      preHandler: isStaff
+      preHandler: isStaff,
     },
     listCourseUsersHandler
+  );
+
+  route.get(
+    "/enrollments/:userId",
+    {
+      schema: {
+        params: $ref("userIdSchema")
+      },
+      preHandler: isAuthenticated
+    },
+    getEnrolledCoursesHandler
   );
 }
