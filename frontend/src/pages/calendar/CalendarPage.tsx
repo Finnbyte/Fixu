@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Calendar from "../../components/Calendar/Calendar";
-import { ArrowLeft, ArrowRight, AddCircle } from "@mui/icons-material"
+import { AddCircle, Delete } from "@mui/icons-material"
 import styles from "./CalendarPage.module.scss";
 import { format } from "date-fns";
+import { ChevronLeft, ChevronRight } from "react-feather"
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { deleteCalendarEvent, fetchCalendarEvents, saveCalendarEvent, selectEventsByDate, updateCalendarEvent } from "../../slices/calendar";
+import { CalendarEvent } from "../../../../backend/db/schemas/calendarEvents";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
 const months = [
   "January",
@@ -19,42 +24,40 @@ const months = [
   "December"
 ];
 
-interface IEvent {
-  id: number;
-  title: string;
+function EventListingItem({ event }: { event: CalendarEvent}) {
+  const dispatch = useAppDispatch();
+  return (
+    <li>
+      <input
+        type="text"
+        value={event.title}
+        onChange={(e) =>
+          dispatch(updateCalendarEvent({ ...event, title: e.target.value }))
+        }
+      />
+      <span onClick={() => dispatch(deleteCalendarEvent(event))}>
+        <Delete />
+      </span>
+    </li>
+  )
 }
 
-function EventsListing({
-  date,
-  events,
-  onEventChange,
-}: {
-  date: Date;
-  events: IEvent[];
-  onEventChange: (event: IEvent) => void;
-}) {
+function EventsListing({ date }: { date: Date }) {
+  const dispatch = useAppDispatch();
+  const selectedDateEvents = useAppSelector(state => selectEventsByDate(state, date));
   return (
     <div className={styles["events-listing"]}>
       <div className={styles["top-row"]}>
         <span>{format(date, "MMM d, EEEE")}</span>
         <div style={{ cursor: "pointer" }} onClick={() => console.log("lolol")}>
-          <AddCircle />
+          <div onClick={() => dispatch(saveCalendarEvent())}>
+            <AddCircle />
+          </div>
         </div>
       </div>
       <ul>
-        {events.map((event) => {
-          return (
-            <li key={event.id}>
-              <input
-                type="text"
-                value={event.title}
-                onChange={(e) =>
-                  onEventChange({ ...event, title: e.target.value })
-                }
-              />
-            </li>
-          );
-        })}
+        {selectedDateEvents.map((event) => (
+          <EventListingItem key={event.id} event={event} />
         ))}
       </ul>
     </div>
