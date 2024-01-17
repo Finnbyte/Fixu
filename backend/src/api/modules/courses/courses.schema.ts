@@ -2,6 +2,7 @@ import { z } from "zod";
 import { insertCourseSchema } from "../../../../db/schemas/courses";
 import { buildJsonSchemas } from "fastify-zod";
 import { cuidSchema } from "../../../../db/common";
+import { userIdSchema } from "../users/users.schema";
 
 export const courseQueryStringSchema = z.object({
   name: z.string()
@@ -19,10 +20,11 @@ export const createCourseUserSchema = z.object({
 });
 
 export const { schemas: coursesSchemas, $ref } = buildJsonSchemas({
+  userIdSchema,
   createCourseSchema,
   addStudentToCourseSchema: createCourseUserSchema,
-  courseParams
-});
+  courseParams,
+}, { $id: "coursesSchemas" });
 
 export type CourseQueryString = z.infer<typeof courseQueryStringSchema>
 export type CourseParams = z.infer<typeof courseParams>
