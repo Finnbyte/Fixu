@@ -1,32 +1,70 @@
 @use "../../colors";
 @use "sass:color";
 
-#table {
-    table-layout: fixed;
-    width: 450px;
-    border-spacing: 0.9rem;
+.dot {
+    display: inline;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: darken(white, 50%);
+}
+
+#calendar {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
 
     th, td {
-        text-align: left;
+        display: flex;
+        flex-direction: column;
+        max-height: 107px;
+    }
+
+    tr,
+    tbody {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        width: 100%;
+    }
+
+    .week {
+        border-spacing: 5rem;
+
+        .day {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid transparent;
+            row-gap: 20px;
+            cursor: pointer;
+            user-select: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            text-align: center;
+
+            span {
+                padding: 0.4rem;
+            }
+        
+            &:hover {
+                background-color: lighten(colors.$surface, 10%);
+            }
+
+            &.selected {
+                border-color: colors.$primary;
+                background-color: mix(colors.$surface, colors.$primary, 92%);
+            }
+        
+            &.today span {
+                background-color: colors.$primary;
+                border-radius: 50%;
+            
+                &:hover {
+                    background-color: darken(colors.$primary, 10%);
+                }
+            }
+       }
     }
 }
 
-.calendar-day {
-    cursor: pointer;
-    user-select: none;
-    padding: 0.85rem;
-    border-radius: 25px;
-    text-align: center;
-
-    &:hover {
-        background-color: lighten(colors.$surface, 10%);
-    }
-
-    &.today {
-        background-color: colors.$primary;
-
-        &:hover {
-            background-color: darken(colors.$primary, 10%);
-        }
-    }
-}
