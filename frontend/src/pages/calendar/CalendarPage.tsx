@@ -55,29 +55,24 @@ function EventsListing({
             </li>
           );
         })}
+        ))}
       </ul>
     </div>
   );
 }
 
 export default function CalendarPage() {
+  const calendar = useAppSelector((state) => state.calendar);
+  const dispatch = useAppDispatch();
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [events, setEvents] = useState([{ id: 1, title: "Feed cats" }, { id: 2, title: "Eat popcorn" }, { id: 3, title: "Take shower" }]);
 
-  function handleDateSelect(date: Date) {
-    setSelectedDate(date);
-  }
+  useEffect(() => {
+    dispatch(fetchCalendarEvents());
+  }, []);
 
-  function handleEventChange(event: IEvent) {
-    setEvents(prev => prev.map(e => {
-      if (e.id === event.id) {
-        return { ...e, ...event };
-      }
-
-      return e;
-    }))
+  if (calendar.status !== "idle") {
+    return null;
   }
 
   function handleMonthChange(newMonth: number) {
@@ -99,18 +94,14 @@ export default function CalendarPage() {
           <span>
             {months[month - 1]} {year}
           </span>
-          <div>
-            <button onClick={() => handleMonthChange(month - 1)}>
-              <ArrowLeft />
-            </button>
-            <button onClick={() => handleMonthChange(month + 1)}>
-              <ArrowRight />
-            </button>
+          <div style={{ display: "flex", gap: "3rem" }}>
+            <ChevronLeft className={styles.chevron} onClick={() => handleMonthChange(month - 1)} />
+            <ChevronRight className={styles.chevron} onClick={() => handleMonthChange(month + 1)} />
           </div>
         </div>
-        <Calendar year={year} month={month} onDateClick={handleDateSelect} />
+        <Calendar year={year} month={month} />
       </div>
-      <EventsListing date={selectedDate} events={events} onEventChange={handleEventChange} />
+      <EventsListing date={new Date(calendar.data.selectedDate)} />
     </div>
   );
 }
