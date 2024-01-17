@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client'
 import { RouteObject, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Login from './pages/login/Login.tsx';
 import Register from './pages/register/Register.tsx';
-import Courses from './pages/courses/Courses.tsx';
+import CoursesPage from './pages/courses/CoursesPage.tsx';
 import Dashboard from './pages/dashboard/DashboardPage.tsx';
 import { AuthGuard } from './components/AuthGuard/AuthGuard.tsx';
 import Settings from './pages/settings/Settings.tsx';
@@ -29,7 +29,7 @@ export const ROUTES: RouteObject[] = [
       },
       {
         path: "courses",
-        element: <Courses />,
+        element: <CoursesPage />,
       },
       {
         path: "settings",
