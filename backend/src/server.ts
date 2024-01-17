@@ -8,6 +8,8 @@ import coursesRoute from "./api/modules/courses/courses.route";
 import { coursesSchemas } from "./api/modules/courses/courses.schema";
 import fastifyCookie from "@fastify/cookie";
 import healthcheckRoute from "./api/modules/healthcheck/healthcheck.route";
+import { calendarEventsRoute } from "./api/modules/calendar-events/calendarEvents.route";
+import { calendarEventsSchemas } from "./api/modules/calendar-events/calendarEvents.schema";
 
 export function serverBuilder() {
   const server = Fastify({
@@ -24,7 +26,7 @@ export function serverBuilder() {
 
   server.decorateRequest("user", null);
 
-  for (const schema of [...sessionSchemas, ...usersSchemas, ...coursesSchemas]) {
+  for (const schema of [...sessionSchemas, ...usersSchemas, ...coursesSchemas, ...calendarEventsSchemas]) {
     server.addSchema(schema);
   }
 
@@ -32,6 +34,7 @@ export function serverBuilder() {
   server.register(usersRoute, { prefix: "api/users" });
   server.register(sessionRoute, { prefix: "api/session" });
   server.register(coursesRoute, { prefix: "api/courses" });
+  server.register(calendarEventsRoute, { prefix: "api/calendar-events" });
 
   return server;
 }
