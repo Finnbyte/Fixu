@@ -1,0 +1,18 @@
+@use "../../colors";
+
+.course {
+    display: flex;
+    background-color: colors.$surface-variant;
+
+    &.information-container {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+}
