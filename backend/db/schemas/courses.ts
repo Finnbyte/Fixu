@@ -1,11 +1,11 @@
 import { boolean, date, mysqlTable, text, varchar } from "drizzle-orm/mysql-core";
-import { MAX_CUID_LENGTH, cuidId } from "../common";
+import { MAX_CUID_LENGTH, primaryCuidIdKey } from "../common";
 import { users } from "./users";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const courses = mysqlTable("courses", {
-  id: cuidId(),
+  id: primaryCuidIdKey(),
   name: varchar("name", { length: 62 }).unique().notNull(),
   description: text("description").notNull(),
   createdAt: date("created_at").notNull(),
