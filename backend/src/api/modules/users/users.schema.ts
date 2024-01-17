@@ -17,16 +17,16 @@ const registerSchema = insertUserSchema
     })
   );
 
-const userParams = z.object({
+export const userIdSchema = z.object({
   userId: cuidSchema
 });
 
 export type CreateUserInput = z.infer<typeof insertUserSchema>
 export type User = z.infer<typeof selectUserSchema>
-export type UserParams = z.infer<typeof userParams>
+export type UserParams = z.infer<typeof userIdSchema>
 
 export const { schemas: usersSchemas, $ref } = buildJsonSchemas({
   registerSchema,
-  userParams,
+  userParams: userIdSchema,
   cuidSchema
 }, { $id: "usersSchemas" });
