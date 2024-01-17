@@ -20,6 +20,11 @@ body {
     span, label, p, h1, h2, h3, h4 {
         color: white;
     }
+
+    * {
+        min-width: 0;
+        box-sizing: border-box;
+    }
 }
 
 #root {
