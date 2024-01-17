@@ -1,5 +1,12 @@
 @use "../../colors";
 
+.chevron {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    color: white;
+}
+
 .page {
     display: flex;
     justify-content: space-between;
