@@ -47,13 +47,7 @@ export const calendarSlice = createSlice({
       return state.data.events.filter(event => isSameDay(event.date, date));
     },
     isDateEventful(state, date: Date) {
-      for (const event of state.data.events) {
-        if (isSameDay(event.date, date)) {
-          return true;
-        }
-      }
-
-      return false;
+      return state.data.events.some(event => isSameDay(event.date, date))
     }
   },
   reducers: {
