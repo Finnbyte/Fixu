@@ -21,7 +21,7 @@ function Course({ title, description, isEnrolled, onMembershipUpdate }: CoursePr
         {description}
       </div>
       <button onClick={() => onMembershipUpdate(isEnrolled ? "join" : "leave")}>
-        {isEnrolled ? "Join" : "Leave"}
+        {isEnrolled ? "Join course" : "Leave course"}
       </button>
     </div>
   )
