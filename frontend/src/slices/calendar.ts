@@ -26,10 +26,11 @@ export const fetchCalendarEvents = createAsyncThunk("calendarEvent/fetchCalendar
   return (await res.json());
 })
 
-export const saveCalendarEvent = createAsyncThunk("calendarEvent/saveCalendarEvent", async () => {
+export const saveCalendarEvent = createAsyncThunk("calendarEvent/saveCalendarEvent", async (event: CalendarEvent) => {
   const res = await fetch(`/api/calendar-events`, {
     method: "POST",
     credentials: "include",
+    body: JSON.stringify(event)
   })
 
   return (await res.json()).data;
