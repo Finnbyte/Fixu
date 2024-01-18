@@ -1,6 +1,8 @@
 import { useFetch } from "../../hooks/useFetch";
 import styles from "./CoursesPage.module.scss";
 import { Course } from "../../../../backend/db/schemas/courses";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { useRef } from "react";
 
 interface CourseProps {
   title: string;
@@ -26,7 +28,9 @@ function Course({ title, description, isEnrolled, onMembershipUpdate }: CoursePr
 }
 
 export default function CoursesPage() {
+  const user = useAppSelector(state => state.user.data);
   const result = useFetch<Course[]>("/api/courses");
+  const dialogRef = useRef<HTMLDialogElement>(null);
   if (!result.data) {
     return null;
   }
@@ -38,8 +42,15 @@ export default function CoursesPage() {
     console.log(courseId, type);
   }
 
+
   return (
     <div className={styles.page}>
+      <dialog ref={dialogRef}>
+        <p>Moroo:)</p>
+      </dialog>
+      {user?.privilege === "admin" && (
+        <button onClick={() => dialogRef.current?.showModal()}>Create a course</button>
+      )}
       {courses.map((course) => {
         const { id, name, description } = course;
         return (
