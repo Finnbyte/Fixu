@@ -24,22 +24,33 @@ const months = [
   "December"
 ];
 
-function EventListingItem({ event }: { event: CalendarEvent}) {
+function EventListingItem({ event }: { event: CalendarEvent }) {
   const dispatch = useAppDispatch();
+
+  const titleRef = useRef<HTMLInputElement>(null);
+
+  function handleEventTitleChange() {
+    if (titleRef.current) {
+      const title = titleRef.current.value;
+      dispatch(updateCalendarEvent({ ...event, title }));
+    }
+  }
+
   return (
     <li>
       <input
+        autoFocus
         type="text"
-        value={event.title}
-        onChange={(e) =>
-          dispatch(updateCalendarEvent({ ...event, title: e.target.value }))
-        }
+        ref={titleRef}
+        defaultValue={event.title}
+        onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
+        onBlur={handleEventTitleChange}
       />
       <span onClick={() => dispatch(deleteCalendarEvent(event))}>
         <Delete />
       </span>
     </li>
-  )
+  );
 }
 
 function EventsListing({ date }: { date: Date }) {
