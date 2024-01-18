@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Calendar from "../../components/Calendar/Calendar";
 import { AddCircle, Delete } from "@mui/icons-material"
 import styles from "./CalendarPage.module.scss";
 import { format } from "date-fns";
 import { ChevronLeft, ChevronRight } from "react-feather"
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { deleteCalendarEvent, fetchCalendarEvents, saveCalendarEvent, selectEventsByDate, updateCalendarEvent } from "../../slices/calendar";
+import { addCalendarEvent, deleteCalendarEvent, fetchCalendarEvents, selectEventsByDate, updateCalendarEvent } from "../../slices/calendar";
 import { CalendarEvent } from "../../../../backend/db/schemas/calendarEvents";
 import { useAppSelector } from "../../hooks/useAppSelector";
 
@@ -54,16 +54,17 @@ function EventListingItem({ event }: { event: CalendarEvent }) {
 }
 
 function EventsListing({ date }: { date: Date }) {
+  const userId = useAppSelector((state) => state.user.data!.id);
   const dispatch = useAppDispatch();
-  const selectedDateEvents = useAppSelector(state => selectEventsByDate(state, date));
+  const selectedDateEvents = useAppSelector((state) =>
+    selectEventsByDate(state, date)
+  );
   return (
     <div className={styles["events-listing"]}>
       <div className={styles["top-row"]}>
         <span>{format(date, "MMM d, EEEE")}</span>
-        <div style={{ cursor: "pointer" }} onClick={() => console.log("lolol")}>
-          <div onClick={() => dispatch(saveCalendarEvent())}>
-            <AddCircle />
-          </div>
+        <div style={{ cursor: "pointer" }} onClick={() => dispatch(addCalendarEvent(userId))}>
+          <AddCircle />
         </div>
       </div>
       <ul>
