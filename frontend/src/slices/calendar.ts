@@ -2,6 +2,7 @@ import { ActionStatus } from "./common"
 import { CalendarEvent } from "../../../backend/db/schemas/calendarEvents";
 import { SerializedError, createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { isSameDay } from "date-fns";
+import cuid2 from "@paralleldrive/cuid2";
 
 interface CalendarStateData {
   events: CalendarEvent[]
@@ -55,6 +56,16 @@ export const calendarSlice = createSlice({
     setSelectedDate: (state, action: PayloadAction<string>) => {
       state.data.selectedDate = action.payload;
     },
+    addCalendarEventForUser: (state, action: PayloadAction<string>) => {
+      const attendeeId = action.payload;
+      const event: CalendarEvent = {
+        id: cuid2.createId(),
+        date: state.data.selectedDate,
+        title: "",
+        attendee: attendeeId
+      }
+      state.data.events = [...state.data.events, event]
+    },
     updateCalendarEvent: (state, action: PayloadAction<CalendarEvent>) => {
       state.data.events = state.data.events.map((event) => {
         if (event.id === action.payload.id) {
@@ -83,5 +94,5 @@ export const calendarSlice = createSlice({
   },
 });
 
-export const {setSelectedDate, deleteCalendarEvent, updateCalendarEvent } = calendarSlice.actions;
+export const {setSelectedDate, addCalendarEventForUser: addCalendarEvent, deleteCalendarEvent, updateCalendarEvent } = calendarSlice.actions;
 export const { isDateEventful, selectEventsByDate } = calendarSlice.selectors;
