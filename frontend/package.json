@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.19",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@reduxjs/toolkit": "^2.0.1",
     "classnames": "^2.5.1",
     "date-fns": "^3.2.0",
