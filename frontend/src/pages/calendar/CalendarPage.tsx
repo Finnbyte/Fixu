@@ -2,10 +2,10 @@ import { useRef, useState } from "react";
 import Calendar from "../../components/Calendar/Calendar";
 import { AddCircle, Delete } from "@mui/icons-material"
 import styles from "./CalendarPage.module.scss";
-import { format } from "date-fns";
+import { format, isSameDay } from "date-fns";
 import { ChevronLeft, ChevronRight } from "react-feather"
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { addCalendarEvent, deleteCalendarEvent, selectEventsByDate, updateCalendarEvent } from "../../slices/calendar";
+import { addCalendarEvent, deleteCalendarEvent, updateCalendarEvent } from "../../slices/calendar";
 import { CalendarEvent } from "../../../../backend/db/schemas/calendarEvents";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useGetCalendarEventsQuery } from "../../slices/api";
@@ -55,11 +55,14 @@ function EventListingItem({ event }: { event: CalendarEvent }) {
 }
 
 function EventsListing({ date }: { date: Date }) {
-  const userId = useAppSelector((state) => state.user.data!.id);
+  const { selectedDateEvents } = useGetCalendarEventsQuery(undefined, {
+    selectFromResult: ({ data }) => ({
+      selectedDateEvents: data?.filter(event => isSameDay(event.date, date)) ?? []
+    })
+  });
   const dispatch = useAppDispatch();
-  const selectedDateEvents = useAppSelector((state) =>
-    selectEventsByDate(state, date)
-  );
+  const userId = useAppSelector((state) => state.user.data!.id);
+
   return (
     <div className={styles["events-listing"]}>
       <div className={styles["top-row"]}>
@@ -78,15 +81,10 @@ function EventsListing({ date }: { date: Date }) {
 }
 
 export default function CalendarPage() {
-  const { data: calendarEvents } = useGetCalendarEventsQuery();
   const selectedDate = useAppSelector(state => state.calendar.data.selectedDate);
 
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
-
-  if (!calendarEvents) {
-    return null;
-  }
 
   function handleMonthChange(newMonth: number) {
     if (newMonth < 1) {
