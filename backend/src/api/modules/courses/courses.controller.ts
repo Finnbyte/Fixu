@@ -86,3 +86,12 @@ export async function enrollUserHandler(req: FastifyRequest, reply: FastifyReply
   await createEnrollment(courseId, userId);
 }
 
+export async function disenrollUserHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = req.params as z.infer<typeof enrollUserToCourseSchema>;
+  const  { userId, courseId } = params;
+
+  if (!isSpeciallyPrivileged(req.user) && params.userId !== req.user.id) {
+    return reply.code(401).send({ msg: "No authorization to control other users" });
+  }
+  await removeEnrollment(courseId, userId);
+}

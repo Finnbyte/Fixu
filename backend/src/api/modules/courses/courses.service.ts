@@ -62,4 +62,6 @@ export async function createEnrollment(courseId: string, userId: string) {
   await db.insert(usersCourses).values({ courseId, userId, isTeaching: false });
 }
 
+export async function removeEnrollment(courseId: string, userId: string) {
+  await db.delete(usersCourses).where(and(eq(usersCourses.courseId, courseId), eq(usersCourses.userId, userId)));
 }

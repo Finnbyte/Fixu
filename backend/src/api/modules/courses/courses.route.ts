@@ -73,4 +73,14 @@ export default async function coursesRoute(route: FastifyInstance) {
     enrollUserHandler
   );
 
+  route.post(
+    "/:courseId/disenroll/:userId",
+    {
+      schema: {
+        params: $ref("enrollUserToCourseSchema")
+      },
+      preHandler: isAuthenticated
+    },
+    disenrollUserHandler
+  );
 }
