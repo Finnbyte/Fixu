@@ -50,12 +50,13 @@ export async function createCourse(course: CreateCourseFull) {
 }
 
 export async function fetchEnrolledCourses(userId: string) {
-  return await db
+  const result = await db
     .select()
     .from(usersCourses)
     .where(eq(usersCourses.userId, userId))
     .leftJoin(courses, eq(courses.id, usersCourses.courseId));
 
+  return result.map(row => row.courses?.id) ;
 }
 
 export async function createEnrollment(courseId: string, userId: string) {
