@@ -27,6 +27,13 @@ export const apiSlice = createApi({
         method: "POST"
       }),
       invalidatesTags: ["EnrolledCourse"]
+    }),
+    updateCalendarEvent: builder.mutation<void, { eventId: string, payload?: CalendarEvent }>({
+      query: ({ eventId, payload }) => ({
+        url: `/calendar-events/${eventId}`,
+        method: "PUT",
+        body: payload
+      })
     })
   })
 })
