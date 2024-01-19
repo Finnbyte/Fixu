@@ -1,8 +1,7 @@
-import { useFetch } from "../../hooks/useFetch";
 import styles from "./CoursesPage.module.scss";
-import { Course } from "../../../../backend/db/schemas/courses";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useRef } from "react";
+import { useGetCoursesQuery, useGetEnrolledCoursesQuery, useUpdateEnrollmentStatusMutation } from "../../slices/api";
 
 interface CourseProps {
   title: string;
@@ -28,20 +27,17 @@ function Course({ title, description, isEnrolled, onMembershipUpdate }: CoursePr
 }
 
 export default function CoursesPage() {
-  const user = useAppSelector(state => state.user.data);
-  const result = useFetch<Course[]>("/api/courses");
+  const user = useAppSelector((state) => state.user.data!);
+  console.log("rerendered");
+  const { data: courses } = useGetCoursesQuery();
+  const { data: enrolledCourses } = useGetEnrolledCoursesQuery(user.id);
+  const [updateEnrollment] = useUpdateEnrollmentStatusMutation();
+
   const dialogRef = useRef<HTMLDialogElement>(null);
-  if (!result.data) {
+
+  if (!courses || !enrolledCourses) {
     return null;
   }
-
-  const courses = result.data;
-
-  function handleMembershipUpdate(courseId: string, type: "join" | "leave") {
-    //todo
-    console.log(courseId, type);
-  }
-
 
   return (
     <div className={styles.page}>
