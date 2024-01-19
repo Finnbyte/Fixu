@@ -31,8 +31,39 @@ interface ICalendarProps {
 const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export default function Calendar(props: ICalendarProps) {
-  const dates = getDatesInMonth(props.month, props.year);
-  const offsetDates = getOffsetDatesInMonth(dates[0]);
+  const dispatch = useAppDispatch();
+  const selectedDate = useAppSelector(state => state.calendar.data.selectedDate);
+
+  const monthDates = getDatesInMonth(props.month, props.year);
+  const offsetDates = getOffsetDatesInMonth(monthDates[0]);
+  const dates = [...offsetDates, ...monthDates];
+
+  function Week() {
+    return (
+      <>
+        {[0, 1, 2, 3, 4, 5].map((week) => {
+          return (
+            <tr className={styles.week} key={week}>
+              {dates.slice(week * 7, ++week * 7).map((date: Date) => {
+                return (
+                  <CalendarDay
+                    key={date.getTime()}
+                    date={date}
+                    isSelected={isSameDay(selectedDate, date)}
+                    isCurrentDate={isToday(date)}
+                    isPreviousMonthDate={isLastMonthDate(date, props.month)}
+                    onClick={(date) =>
+                      dispatch(setSelectedDate(date.toISOString()))
+                    }
+                  />
+                );
+              })}
+            </tr>
+          );
+        })}
+      </>
+    );
+  }
 
   return (
     <table id={styles.calendar}>
@@ -43,44 +74,8 @@ export default function Calendar(props: ICalendarProps) {
           </th>
         ))}
       </tr>
-      <CalendarDays
-        dates={[...offsetDates, ...dates]}
-        month={props.month}
-      />
+      <Week />
     </table>
-  );
-}
-
-interface ICalendarDaysProps {
-    dates: Date[];
-    month: number;
-}
-
-function CalendarDays({ dates, month }: ICalendarDaysProps) {
-  const calendar = useAppSelector(state => state.calendar.data);
-  const dispatch = useAppDispatch();
-
-  return (
-    <>
-      {[0, 1, 2, 3, 4, 5].map((week) => {
-        return (
-          <tr className={styles.week} key={week}>
-            {dates.slice(week * 7, ++week * 7).map((date: Date) => {
-              return (
-                <CalendarDay
-                  key={date.getTime()}
-                  date={date}
-                  isSelected={isSameDay(calendar.selectedDate, date)}
-                  isCurrentDate={isToday(date)}
-                  isPreviousMonthDate={isLastMonthDate(date, month)}
-                  onClick={(date) => dispatch(setSelectedDate(date.toISOString()))}
-                />
-              );
-            })}
-          </tr>
-        );
-      })}
-    </>
   );
 }
 

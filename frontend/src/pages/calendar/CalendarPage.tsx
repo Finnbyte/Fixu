@@ -1,13 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Calendar from "../../components/Calendar/Calendar";
 import { AddCircle, Delete } from "@mui/icons-material"
 import styles from "./CalendarPage.module.scss";
 import { format } from "date-fns";
 import { ChevronLeft, ChevronRight } from "react-feather"
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { addCalendarEvent, deleteCalendarEvent, fetchCalendarEvents, selectEventsByDate, updateCalendarEvent } from "../../slices/calendar";
+import { addCalendarEvent, deleteCalendarEvent, selectEventsByDate, updateCalendarEvent } from "../../slices/calendar";
 import { CalendarEvent } from "../../../../backend/db/schemas/calendarEvents";
 import { useAppSelector } from "../../hooks/useAppSelector";
+import { useGetCalendarEventsQuery } from "../../slices/api";
 
 const months = [
   "January",
@@ -77,16 +78,13 @@ function EventsListing({ date }: { date: Date }) {
 }
 
 export default function CalendarPage() {
-  const calendar = useAppSelector((state) => state.calendar);
-  const dispatch = useAppDispatch();
+  const { data: calendarEvents } = useGetCalendarEventsQuery();
+  const selectedDate = useAppSelector(state => state.calendar.data.selectedDate);
+
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
 
-  useEffect(() => {
-    dispatch(fetchCalendarEvents());
-  }, []);
-
-  if (calendar.status !== "idle") {
+  if (!calendarEvents) {
     return null;
   }
 
@@ -116,7 +114,7 @@ export default function CalendarPage() {
         </div>
         <Calendar year={year} month={month} />
       </div>
-      <EventsListing date={new Date(calendar.data.selectedDate)} />
+      <EventsListing date={new Date(selectedDate)} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { ActionStatus } from "./common"
 import { CalendarEvent } from "../../../backend/db/schemas/calendarEvents";
-import { SerializedError, createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { SerializedError, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isSameDay } from "date-fns";
 import cuid2 from "@paralleldrive/cuid2";
 
@@ -14,28 +14,6 @@ interface CalendarEventState {
     status: ActionStatus;
     error: SerializedError | null;
 }
-
-export const fetchCalendarEvents = createAsyncThunk("calendarEvent/fetchCalendarEvents", async () => {
-  const res = await fetch(`/api/calendar-events`, {
-    credentials: "include",
-  })
-
-  if (!res.ok) {
-    return null
-  }
-
-  return (await res.json());
-})
-
-export const saveCalendarEvent = createAsyncThunk("calendarEvent/saveCalendarEvent", async (event: CalendarEvent) => {
-  const res = await fetch(`/api/calendar-events`, {
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify(event)
-  })
-
-  return (await res.json()).data;
-})
 
 export const calendarSlice = createSlice({
   name: "calendar",
@@ -78,19 +56,6 @@ export const calendarSlice = createSlice({
     deleteCalendarEvent: (state, action: PayloadAction<CalendarEvent>) => {
       state.data.events = state.data.events.filter((event) => event.id !== action.payload.id);
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchCalendarEvents.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchCalendarEvents.fulfilled, (state, action) => {
-        state.status = "idle";
-        state.data.events = action.payload;
-      })
-      .addCase(saveCalendarEvent.fulfilled, (state, action) => {
-        state.data.events = [...state.data.events, action.payload];
-      });
   },
 });
 
