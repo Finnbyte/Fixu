@@ -28,6 +28,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["EnrolledCourse"]
     }),
+    createCalendarEvent: builder.mutation<void, { event: CalendarEvent }>({
+      query: ({ event }) => ({
+        url: "/calendar-events",
+        method: "POST",
+        body: event
+      }),
+      invalidatesTags: ["CalendarEvent"]
+    }),
     updateCalendarEvent: builder.mutation<void, { eventId: string, payload?: CalendarEvent }>({
       query: ({ eventId, payload }) => ({
         url: `/calendar-events/${eventId}`,
@@ -38,4 +46,4 @@ export const apiSlice = createApi({
   })
 })
 
-export const { useGetCalendarEventsQuery, useGetCoursesQuery, useGetEnrolledCoursesQuery, useGetUserDataQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
+export const { useCreateCalendarEventMutation, useGetCalendarEventsQuery, useUpdateCalendarEventMutation, useGetCoursesQuery, useGetEnrolledCoursesQuery, useGetUserDataQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
