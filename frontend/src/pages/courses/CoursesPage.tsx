@@ -49,13 +49,17 @@ export default function CoursesPage() {
       )}
       {courses.map((course) => {
         const { id, name, description } = course;
+        const isEnrolled = enrolledCourses.includes(course.id);
         return (
           <Course
             key={id}
             title={name}
             description={description}
-            isEnrolled={true}
-            onMembershipUpdate={(type) => handleMembershipUpdate(id, type)}
+            isEnrolled={isEnrolled}
+            onMembershipUpdate={(status) => {
+              console.log({ status, userId: user.id, courseId: id });
+              updateEnrollment({ status, userId: user.id, courseId: id });
+            }}
           />
         );
       })}

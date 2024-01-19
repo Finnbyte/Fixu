@@ -11,8 +11,14 @@ export const apiSlice = createApi({
     getCourses: builder.query({
       // The URL for the request is '/fakeApi/posts'
       query: () => '/courses'
+    updateEnrollmentStatus: builder.mutation<void, { status: "join" | "leave", userId: string, courseId: string }>({
+      query: ({ status, userId, courseId }) => ({
+        url: `/courses/${courseId}/${status === "join" ? "enroll" : "disenroll"}/${userId}`,
+        method: "POST"
+      }),
+      invalidatesTags: ["EnrolledCourse"]
     })
   })
 })
 
-export const { useGetCoursesQuery } = apiSlice;
+export const { useGetCoursesQuery, useGetEnrolledCoursesQuery, useGetUserDataQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
