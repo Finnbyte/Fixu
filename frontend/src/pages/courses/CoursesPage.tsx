@@ -45,7 +45,9 @@ export default function CoursesPage() {
         <p>Moroo:)</p>
       </dialog>
       {user?.privilege === "admin" && (
-        <button onClick={() => dialogRef.current?.showModal()}>Create a course</button>
+        <button onClick={() => dialogRef.current?.showModal()}>
+          Create a course
+        </button>
       )}
       {courses.map((course) => {
         const { id, name, description } = course;
