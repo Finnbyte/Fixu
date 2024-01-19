@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateCourseUser, CourseParams, CreateCourseInput, courseQueryStringSchema } from "./courses.schema";
-import { createCourse, createCourseUser, fetchAllCourses, fetchCourseById, fetchCourseByName, fetchCourseUsers, fetchEnrolledCourses } from "./courses.service";
+import { CreateCourseUser, CourseParams, CreateCourseInput, courseQueryStringSchema, enrollUserToCourseSchema } from "./courses.schema";
+import { createCourse, createCourseUser, createEnrollment, fetchAllCourses, fetchCourseById, fetchCourseByName, fetchCourseUsers, fetchEnrolledCourses, removeEnrollment } from "./courses.service";
 import { z } from "zod";
 import { userIdSchema } from "../users/users.schema";
 import { isSpeciallyPrivileged } from "../../../utils/user";
@@ -74,3 +74,15 @@ export async function getEnrolledCoursesHandler(req: FastifyRequest, reply: Fast
 
   return await fetchEnrolledCourses(userId);
 }
+
+export async function enrollUserHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = req.params as z.infer<typeof enrollUserToCourseSchema>;
+  const  { userId, courseId } = params;
+
+  if (!isSpeciallyPrivileged(req.user) && params.userId !== req.user.id) {
+    return reply.code(401).send({ msg: "No authorization to control other users" });
+  }
+  
+  await createEnrollment(courseId, userId);
+}
+

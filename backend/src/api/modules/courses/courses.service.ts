@@ -55,4 +55,11 @@ export async function fetchEnrolledCourses(userId: string) {
     .from(usersCourses)
     .where(eq(usersCourses.userId, userId))
     .leftJoin(courses, eq(courses.id, usersCourses.courseId));
+
+}
+
+export async function createEnrollment(courseId: string, userId: string) {
+  await db.insert(usersCourses).values({ courseId, userId, isTeaching: false });
+}
+
 }

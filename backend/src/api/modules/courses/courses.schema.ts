@@ -14,6 +14,11 @@ export const courseParams = z.object({
   courseId: cuidSchema
 });
 
+export const enrollUserToCourseSchema = z.object({
+  courseId: cuidSchema,
+  userId: cuidSchema
+});
+
 export const createCourseUserSchema = z.object({
   userId: cuidSchema,
   isTeacher: z.boolean()
@@ -22,6 +27,7 @@ export const createCourseUserSchema = z.object({
 export const { schemas: coursesSchemas, $ref } = buildJsonSchemas({
   userIdSchema,
   createCourseSchema,
+  enrollUserToCourseSchema,
   addStudentToCourseSchema: createCourseUserSchema,
   courseParams,
 }, { $id: "coursesSchemas" });
