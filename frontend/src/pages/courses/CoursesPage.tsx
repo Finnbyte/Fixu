@@ -28,7 +28,6 @@ function Course({ title, description, isEnrolled, onMembershipUpdate }: CoursePr
 
 export default function CoursesPage() {
   const user = useAppSelector((state) => state.user.data!);
-  console.log("rerendered");
   const { data: courses } = useGetCoursesQuery();
   const { data: enrolledCourses } = useGetEnrolledCoursesQuery(user.id);
   const [updateEnrollment] = useUpdateEnrollmentStatusMutation();
