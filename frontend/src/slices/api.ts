@@ -1,16 +1,21 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { Course } from "../../../backend/db/schemas/courses";
+import { CalendarEvent } from "../../../backend/db/schemas/calendarEvents";
 
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: "/api/" }),
-  tagTypes: ["EnrolledCourse", "Course", "Session"],
+  tagTypes: ["EnrolledCourse", "Course", "Session", "CalendarEvent"],
   endpoints: builder => ({
     getUserData: builder.query<{ userId: string }, void>({
       query: () => "/session"
     }),
     getCourses: builder.query<Course[], void>({
       query: () => "/courses"
+    }),
+    getCalendarEvents: builder.query<CalendarEvent[], void>({
+      query: () => "/calendar-events",
+      providesTags: ["CalendarEvent"]
     }),
     getEnrolledCourses: builder.query<string[], string>({
       query: (userId) => `/courses/enrollments/${userId}`,
@@ -26,4 +31,4 @@ export const apiSlice = createApi({
   })
 })
 
-export const { useGetCoursesQuery, useGetEnrolledCoursesQuery, useGetUserDataQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
+export const { useGetCalendarEventsQuery, useGetCoursesQuery, useGetEnrolledCoursesQuery, useGetUserDataQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
