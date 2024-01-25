@@ -11,9 +11,10 @@ export async function createCalendarEventHandler(req: FastifyRequest) {
   const body = req.body as CreateCalendarEvent;
   const calendarEvent = {
     title: body.title,
+    type: body.type,
     date: new Date().toISOString(),
     attendee: req.user.id
-  };
+  } as CreateCalendarEvent;
 
   await createCalendarEvent(calendarEvent);
 
