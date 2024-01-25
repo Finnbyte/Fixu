@@ -11,7 +11,7 @@ export const calendarEvents = mysqlTable("calendar_events", {
   id: primaryCuidIdKey(),
   type: mysqlEnum("type", calendarEventTypes).notNull(),
   courseId: cuidId("course_id").references(() => courses.id),
-  author_id: cuidId("author_id").references(() => users.id),
+  authorId: cuidId("author_id").references(() => users.id),
   title: varchar("title", { length: 40 }).notNull(),
   date: date("date", { mode: "string" }).notNull(),
 });
