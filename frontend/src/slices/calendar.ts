@@ -1,8 +1,7 @@
 import { ActionStatus } from "./common"
 import { CalendarEvent } from "../../../backend/db/schemas/calendarEvents";
 import { SerializedError, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { isSameDay } from "date-fns";
-import cuid2 from "@paralleldrive/cuid2";
+import { isPast, isSameDay } from "date-fns";
 
 interface CalendarStateData {
   events: CalendarEvent[]
@@ -15,10 +14,24 @@ interface CalendarEventState {
     error: SerializedError | null;
 }
 
+function getInitialSelectedDate() {
+  const isDateCached = localStorage.getItem("calendarSelectedDate")
+  if (!isDateCached) {
+    return new Date().toISOString();
+  }
+
+  const dateCache = JSON.parse(localStorage.getItem("calendarSelectedDate")!);
+  if (isPast(dateCache.invalidate)) {
+    return new Date().toISOString();
+  }
+  
+  return dateCache.date;
+}
+
 export const calendarSlice = createSlice({
   name: "calendar",
   initialState: {
-    data: { events: [], selectedDate: new Date().toISOString() },
+    data: { events: [], selectedDate: getInitialSelectedDate() },
     status: "idle",
     error: null,
   } as CalendarEventState,
