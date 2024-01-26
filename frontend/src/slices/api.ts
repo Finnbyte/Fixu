@@ -3,30 +3,36 @@ import { Course } from "../../../backend/db/schemas/courses";
 import { CalendarEvent } from "../../../backend/db/schemas/calendarEvents";
 
 export const apiSlice = createApi({
-  reducerPath: 'api',
+  reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/" }),
   tagTypes: ["EnrolledCourse", "Course", "Session", "CalendarEvent"],
-  endpoints: builder => ({
+  endpoints: (builder) => ({
     getUserData: builder.query<{ userId: string }, void>({
-      query: () => "/session"
+      query: () => "/session",
     }),
     getCourses: builder.query<Course[], void>({
-      query: () => "/courses"
+      query: () => "/courses",
     }),
     getCalendarEvents: builder.query<CalendarEvent[], void>({
       query: () => "/calendar-events",
-      providesTags: ["CalendarEvent"]
+      providesTags: ["CalendarEvent"],
     }),
     getEnrolledCourses: builder.query<string[], string>({
       query: (userId) => `/courses/enrollments/${userId}`,
-      providesTags: ["EnrolledCourse"]
+      providesTags: ["EnrolledCourse"],
     }),
-    updateEnrollmentStatus: builder.mutation<void, { status: "join" | "leave", userId: string, courseId: string }>({
+    updateEnrollmentStatus: builder.mutation<
+      void,
+      { status: "join" | "leave"; userId: string; courseId: string }
+    >({
       query: ({ status, userId, courseId }) => ({
-        url: `/courses/${courseId}/${status === "join" ? "enroll" : "disenroll"}/${userId}`,
-        method: "POST"
+        url: `/courses/${courseId}/${
+          status === "join" ? "enroll" : "disenroll"
+        }/${userId}`,
+        method: "POST",
       }),
-      invalidatesTags: ["EnrolledCourse"]
+      invalidatesTags: ["EnrolledCourse"],
+    }),
     getMonthCalendarEvents: builder.query<
       CalendarEvent[],
       { year: number; month: number }
@@ -39,18 +45,21 @@ export const apiSlice = createApi({
       query: ({ event }) => ({
         url: "/calendar-events",
         method: "POST",
-        body: event
+        body: event,
       }),
-      invalidatesTags: ["CalendarEvent"]
+      invalidatesTags: ["CalendarEvent"],
     }),
-    updateCalendarEvent: builder.mutation<void, { eventId: string, payload?: CalendarEvent }>({
+    updateCalendarEvent: builder.mutation<
+      void,
+      { eventId: string; payload?: CalendarEvent }
+    >({
       query: ({ eventId, payload }) => ({
         url: `/calendar-events/${eventId}`,
         method: "PUT",
-        body: payload
-      })
-    })
-  })
-})
+        body: payload,
+      }),
+    }),
+  }),
+});
 
-export const { useCreateCalendarEventMutation, useGetCalendarEventsQuery, useUpdateCalendarEventMutation, useGetCoursesQuery, useGetEnrolledCoursesQuery, useGetUserDataQuery, useUpdateEnrollmentStatusMutation } = apiSlice;export const { useGetMonthCalendarEventsQuery, useCreateCalendarEventMutation, useGetCalendarEventsQuery, useUpdateCalendarEventMutation, useGetCoursesQuery, useGetEnrolledCoursesQuery, useGetUserDataQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
+export const { useGetMonthCalendarEventsQuery, useCreateCalendarEventMutation, useGetCalendarEventsQuery, useUpdateCalendarEventMutation, useGetCoursesQuery, useGetEnrolledCoursesQuery, useGetUserDataQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
