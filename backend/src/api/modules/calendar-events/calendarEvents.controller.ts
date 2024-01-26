@@ -1,9 +1,16 @@
 import { FastifyRequest } from "fastify";
-import { createCalendarEvent, fetchCalendarEvents } from "./calendarEvents.service";
-import { CreateCalendarEvent } from "./calendarEvents.schema";
+import { z } from "zod";
+import { createCalendarEvent, fetchCalendarEventByMonth, fetchCalendarEvents } from "./calendarEvents.service";
+import { calendarEventQuery, CreateCalendarEvent } from "./calendarEvents.schema";
 
 export async function getUsersCalendarEventsHandler(req: FastifyRequest) {
-  const calendarEvents = await fetchCalendarEvents(req.user.id);
+  const { year, month } = req.query as z.infer<typeof calendarEventQuery>;
+  const userId = req.user.id;
+  if (year && month) {
+    return await fetchCalendarEventByMonth(userId, year, month)
+  }
+
+  const calendarEvents = await fetchCalendarEvents(userId);
   return calendarEvents;
 }
 
