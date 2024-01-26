@@ -1,14 +1,14 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Calendar from "../../components/Calendar/Calendar";
 import { AddCircle, Delete } from "@mui/icons-material"
 import styles from "./CalendarPage.module.scss";
-import { format } from "date-fns";
+import { addMonths, format, isSameDay, subMonths } from "date-fns";
 import { ChevronLeft, ChevronRight } from "react-feather"
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { addCalendarEvent, deleteCalendarEvent, selectEventsByDate, updateCalendarEvent } from "../../slices/calendar";
+import { deleteCalendarEvent, selectEventsByDate, setSelectedDate, updateCalendarEvent } from "../../slices/calendar";
 import { CalendarEvent } from "../../../../backend/db/schemas/calendarEvents";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { useGetCalendarEventsQuery } from "../../slices/api";
+import { useGetMonthCalendarEventsQuery } from "../../slices/api";
 
 const months = [
   "January",
@@ -25,7 +25,7 @@ const months = [
   "December"
 ];
 
-function EventListingItem({ event }: { event: CalendarEvent }) {
+function EventListingItem({ event, onDiscard }: { event: CalendarEvent, onDiscard: () => void }) {
   const dispatch = useAppDispatch();
 
   const titleRef = useRef<HTMLInputElement>(null);
@@ -37,6 +37,17 @@ function EventListingItem({ event }: { event: CalendarEvent }) {
     }
   }
 
+  function handleInputBlur() {
+    if (!titleRef.current) {
+      return
+    }
+
+    if (titleRef.current.value === "") {
+      onDiscard()
+      return
+    }
+  }
+
   return (
     <li>
       <input
@@ -45,32 +56,57 @@ function EventListingItem({ event }: { event: CalendarEvent }) {
         ref={titleRef}
         defaultValue={event.title}
         onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
-        onBlur={handleEventTitleChange}
+        onBlur={handleInputBlur}
       />
-      <span onClick={() => dispatch(deleteCalendarEvent(event))}>
+      <span onClick={() => onDiscard()}>
         <Delete />
       </span>
     </li>
   );
 }
 
-function EventsListing({ date }: { date: Date }) {
-  const userId = useAppSelector((state) => state.user.data!.id);
-  const dispatch = useAppDispatch();
-  const selectedDateEvents = useAppSelector((state) =>
-    selectEventsByDate(state, date)
-  );
+function EventsListing({
+  events,
+  date,
+}: {
+  events: CalendarEvent[];
+  date: Date;
+}) {
+  const [selectedDateEvents, setSelectedDateEvents] = useState<CalendarEvent[]>([]);
+
+  useEffect(() => {
+    setSelectedDateEvents(events.filter((e) => isSameDay(e.date, date)));
+  }, [events]);
+
+  function handleCreateNewEvent() {
+    const newEvent = {
+      id: crypto.randomUUID(),
+      title: "",
+      type: "personal",
+    } as CalendarEvent;
+    setSelectedDateEvents((prev) => [...prev, newEvent]);
+  }
+
+  function handleDiscardEvent(event: CalendarEvent) {
+    if (event.title === "") {
+      setSelectedDateEvents(prev => prev.filter(e => e.id !== event.id));
+    } else {
+      // TODO discard from db
+    }
+
+  }
+
   return (
     <div className={styles["events-listing"]}>
       <div className={styles["top-row"]}>
         <span>{format(date, "MMM d, EEEE")}</span>
-        <div style={{ cursor: "pointer" }} onClick={() => dispatch(addCalendarEvent(userId))}>
+        <div style={{ cursor: "pointer" }} onClick={handleCreateNewEvent}>
           <AddCircle />
         </div>
       </div>
       <ul>
         {selectedDateEvents.map((event) => (
-          <EventListingItem key={event.id} event={event} />
+          <EventListingItem key={event.id} event={event} onDiscard={() => handleDiscardEvent(event)} />
         ))}
       </ul>
     </div>
@@ -78,26 +114,23 @@ function EventsListing({ date }: { date: Date }) {
 }
 
 export default function CalendarPage() {
-  const { data: calendarEvents } = useGetCalendarEventsQuery();
+  const dispatch = useAppDispatch();
   const selectedDate = useAppSelector(state => state.calendar.data.selectedDate);
 
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const year = new Date(selectedDate).getFullYear();
+  const month = new Date(selectedDate).getMonth() + 1;
 
-  if (!calendarEvents) {
+  const { data: currentMonthEvents } = useGetMonthCalendarEventsQuery({ year, month });
+
+  if (!currentMonthEvents) {
     return null;
   }
 
   function handleMonthChange(newMonth: number) {
-    if (newMonth < 1) {
-      setYear((prev) => --prev);
-      setMonth(12);
-    } else if (newMonth > 12) {
-      setYear((prev) => ++prev);
-      setMonth(1);
-    } else {
-      setMonth(newMonth);
-    }
+    // do this instead of setMonths since it doesn't account for year change
+    const fn = newMonth < month ? subMonths : addMonths;
+    const newSelectedDate = fn(selectedDate, 1).toISOString();
+    dispatch(setSelectedDate(newSelectedDate));
   }
 
   return (
@@ -112,9 +145,9 @@ export default function CalendarPage() {
             <ChevronRight className={styles.chevron} onClick={() => handleMonthChange(month + 1)} />
           </div>
         </div>
-        <Calendar year={year} month={month} />
+        <Calendar events={[...currentMonthEvents]} year={year} month={month} />
       </div>
-      <EventsListing date={new Date(selectedDate)} />
+      <EventsListing events={[...currentMonthEvents]} date={new Date(selectedDate)} />
     </div>
   );
 }
