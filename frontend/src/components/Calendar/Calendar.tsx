@@ -4,6 +4,10 @@ import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { setSelectedDate, isDateEventful } from "../../slices/calendar";
 import classnames from "classnames";
+import { CalendarEvent, CalendarEventType } from "../../../../backend/db/schemas/calendarEvents";
+import { stringify } from "querystring";
+import { type } from "os";
+import { useMemo } from "react";
 
 function getDatesInMonth(month: number, year: number): Date[] {
   const start = startOfMonth(new Date(year, month - 1, 15));
@@ -23,7 +27,17 @@ function isLastMonthDate(date: Date, currentMonthIndex: number) {
   return date.getMonth() + 1 < currentMonthIndex;
 }
 
+function buildEventsMap(events: CalendarEvent[]) { 
+  const map = new Map<number, { title: string, type: CalendarEventType }>();
+  for (const event of events) {
+    const monthDate = new Date(event.date).getDate();
+    map.set(monthDate, { title: event.title, type: event.type });
+  }
+  return map;
+}
+
 interface ICalendarProps {
+  events: CalendarEvent[]
   month: number
   year: number
 }
@@ -38,6 +52,8 @@ export default function Calendar(props: ICalendarProps) {
   const offsetDates = getOffsetDatesInMonth(monthDates[0]);
   const dates = [...offsetDates, ...monthDates];
 
+  const events = useMemo(() => buildEventsMap(props.events), [props.events]);
+
   function Week() {
     return (
       <>
@@ -49,6 +65,7 @@ export default function Calendar(props: ICalendarProps) {
                   <CalendarDay
                     key={date.getTime()}
                     date={date}
+                    isEventful={!!events.get(date.getDate())}
                     isSelected={isSameDay(selectedDate, date)}
                     isCurrentDate={isToday(date)}
                     isPreviousMonthDate={isLastMonthDate(date, props.month)}
@@ -83,12 +100,12 @@ interface ICalendarDayProps {
     date: Date;
     isCurrentDate: boolean
     isSelected: boolean
+    isEventful: boolean
     isPreviousMonthDate: boolean
     onClick: (date: Date) => void
 }
 
-function CalendarDay({ date, isSelected, isCurrentDate, isPreviousMonthDate, onClick }: ICalendarDayProps) {
-  const hasEvents = useAppSelector(state => isDateEventful(state, date));
+function CalendarDay({ date, isEventful, isSelected, isCurrentDate, isPreviousMonthDate, onClick }: ICalendarDayProps) {
   return (
     <td
       className={classnames(styles["day"], { [styles.selected]: isSelected, [styles.today]: isCurrentDate })}
@@ -97,7 +114,7 @@ function CalendarDay({ date, isSelected, isCurrentDate, isPreviousMonthDate, onC
       <span style={{ opacity: `${isPreviousMonthDate && "0.6"}` }}>
         {date.getDate()}
       </span>
-      <div className={`${hasEvents && styles["dot"]}`} />
+      <div className={`${isEventful && styles["dot"]}`} />
     </td>
   );
 }
