@@ -27,6 +27,13 @@ export const apiSlice = createApi({
         method: "POST"
       }),
       invalidatesTags: ["EnrolledCourse"]
+    getMonthCalendarEvents: builder.query<
+      CalendarEvent[],
+      { year: number; month: number }
+    >({
+      query: ({ year, month }) => ({
+        url: `/calendar-events?year=${year}&month=${month}`
+     }),
     }),
     createCalendarEvent: builder.mutation<void, { event: CalendarEvent }>({
       query: ({ event }) => ({
@@ -46,4 +53,4 @@ export const apiSlice = createApi({
   })
 })
 
-export const { useCreateCalendarEventMutation, useGetCalendarEventsQuery, useUpdateCalendarEventMutation, useGetCoursesQuery, useGetEnrolledCoursesQuery, useGetUserDataQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
+export const { useCreateCalendarEventMutation, useGetCalendarEventsQuery, useUpdateCalendarEventMutation, useGetCoursesQuery, useGetEnrolledCoursesQuery, useGetUserDataQuery, useUpdateEnrollmentStatusMutation } = apiSlice;export const { useGetMonthCalendarEventsQuery, useCreateCalendarEventMutation, useGetCalendarEventsQuery, useUpdateCalendarEventMutation, useGetCoursesQuery, useGetEnrolledCoursesQuery, useGetUserDataQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
