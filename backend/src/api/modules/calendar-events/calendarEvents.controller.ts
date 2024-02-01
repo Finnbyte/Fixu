@@ -1,7 +1,8 @@
-import { FastifyRequest } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { createCalendarEvent, fetchCalendarEventByMonth, fetchCalendarEvents } from "./calendarEvents.service";
-import { calendarEventQuery, CreateCalendarEvent } from "./calendarEvents.schema";
+import { createCalendarEvent, deleteCalendarEvent, fetchCalendarEventByMonth, fetchCalendarEvents, updateCalendarEvent } from "./calendarEvents.service";
+import { calendarEventParams, calendarEventQuery, CreateCalendarEvent } from "./calendarEvents.schema";
+import { CalendarEvent } from "../../../../db/schemas/calendarEvents";
 
 export async function getUsersCalendarEventsHandler(req: FastifyRequest) {
   const { year, month } = req.query as z.infer<typeof calendarEventQuery>;
@@ -23,7 +24,22 @@ export async function createCalendarEventHandler(req: FastifyRequest) {
     authorId: req.user.id
   } as CreateCalendarEvent;
 
+  console.log("Debug", calendarEvent.date)
   await createCalendarEvent(calendarEvent);
 
   return;
+}
+
+export async function updateCalendarEventHandler(req: FastifyRequest, reply: FastifyReply) {
+  const calendarEvent = req.body as CalendarEvent;
+
+  await updateCalendarEvent(calendarEvent);
+  return reply.code(200).send();
+}
+
+export async function deleteCalendarEventHandler(req: FastifyRequest, reply: FastifyReply) {
+  const { calendarEventId } = req.params as z.infer<typeof calendarEventParams>;
+
+  await deleteCalendarEvent(calendarEventId);
+  return reply.code(200).send()
 }
