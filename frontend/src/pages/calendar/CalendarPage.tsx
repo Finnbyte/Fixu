@@ -1,14 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import Calendar from "../../components/Calendar/Calendar";
 import { AddCircle, Delete } from "@mui/icons-material"
 import styles from "./CalendarPage.module.scss";
-import { addMonths, format, isSameDay, subMonths } from "date-fns";
+import { addMonths, format, subMonths } from "date-fns";
 import { ChevronLeft, ChevronRight } from "react-feather"
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { deleteCalendarEvent, selectEventsByDate, setSelectedDate, updateCalendarEvent } from "../../slices/calendar";
+import { addCalendarEvent, deleteCalendarEvent, selectEventsByDate, setSelectedDate } from "../../slices/calendar";
 import { CalendarEvent } from "../../../../backend/db/schemas/calendarEvents";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { useGetMonthCalendarEventsQuery } from "../../slices/api";
+import { useCreateCalendarEventMutation, useGetMonthCalendarEventsQuery, useUpdateCalendarEventMutation } from "../../slices/api";
+import { isCuid } from "@paralleldrive/cuid2";
+import { offsetDateByLocal } from "../../helpers/datetime";
 
 const months = [
   "January",
@@ -25,29 +27,46 @@ const months = [
   "December"
 ];
 
-function EventListingItem({ event, onDiscard }: { event: CalendarEvent, onDiscard: () => void }) {
+interface EventListingItemProps {
+  event: CalendarEvent, 
+  onDiscard: () => void 
+}
+
+function EventListingItem({ event, onDiscard }: EventListingItemProps) {
   const dispatch = useAppDispatch();
+  const [createCalendarEventQuery] = useCreateCalendarEventMutation();
+  const [updateCalendarEventQuery] = useUpdateCalendarEventMutation();
 
   const titleRef = useRef<HTMLInputElement>(null);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
-      e.currentTarget.blur()
+      e.currentTarget.blur();
     } else if (e.key === "Escape") {
-      onDiscard()
+      onDiscard();
     }
   }
 
   function handleInputBlur() {
     if (!titleRef.current) {
-      return
+      return;
     }
 
     if (titleRef.current.value === "") {
-      onDiscard()
-      return
+      onDiscard();
+      return;
     }
 
+    const title = titleRef.current.value;
+    const newEvent = { ...event, title }
+
+    // We need to know if its updated or a new event
+    const isFreshlyCreatedEvent = !isCuid(newEvent.id);
+    if (isFreshlyCreatedEvent) {
+      createCalendarEventQuery({ event: newEvent });
+    } else {
+      updateCalendarEventQuery({ event: newEvent });
+    }
   }
 
   return (
@@ -66,18 +85,9 @@ function EventListingItem({ event, onDiscard }: { event: CalendarEvent, onDiscar
   );
 }
 
-function EventsListing({
-  events,
-  date,
-}: {
-  events: CalendarEvent[];
-  date: Date;
-}) {
-  const [selectedDateEvents, setSelectedDateEvents] = useState<CalendarEvent[]>([]);
-
-  useEffect(() => {
-    setSelectedDateEvents(events.filter((e) => isSameDay(e.date, date)));
-  }, [events]);
+function EventsListing({ date }: { date: Date }) {
+  const events = useAppSelector(state => selectEventsByDate(state, date));
+  const dispatch = useAppDispatch();
 
   function handleCreateNewEvent() {
     const newEvent = {
@@ -86,16 +96,15 @@ function EventsListing({
       title: "",
       type: "personal",
     } as unknown as CalendarEvent;
-    setSelectedDateEvents((prev) => [...prev, newEvent]);
+    dispatch(addCalendarEvent(newEvent));
   }
 
   function handleDiscardEvent(event: CalendarEvent) {
     if (event.title === "") {
-      setSelectedDateEvents(prev => prev.filter(e => e.id !== event.id));
+      dispatch(deleteCalendarEvent(event))
     } else {
       // TODO discard from db
     }
-
   }
 
   return (
@@ -107,7 +116,7 @@ function EventsListing({
         </div>
       </div>
       <ul>
-        {selectedDateEvents.map((event) => (
+        {events.map((event) => (
           <EventListingItem key={event.id} event={event} onDiscard={() => handleDiscardEvent(event)} />
         ))}
       </ul>
@@ -117,16 +126,16 @@ function EventsListing({
 
 export default function CalendarPage() {
   const dispatch = useAppDispatch();
-  const selectedDate = useAppSelector(state => state.calendar.data.selectedDate);
+  const selectedDate = new Date(useAppSelector((state) => state.calendar.data.selectedDate));
 
-  const year = new Date(selectedDate).getFullYear();
-  const month = new Date(selectedDate).getMonth() + 1;
+  console.log("selected", selectedDate);
 
-  const { data: currentMonthEvents } = useGetMonthCalendarEventsQuery({ year, month });
+  const year = selectedDate.getFullYear();
+  const month = selectedDate.getMonth() + 1;
 
-  if (!currentMonthEvents) {
-    return null;
-  }
+  // No need to assign since we only care about side effects
+  // Check extraReducers in calendarSlice
+  useGetMonthCalendarEventsQuery({ year, month });
 
   function handleMonthChange(newMonth: number) {
     // do this instead of setMonths since it doesn't account for year change
@@ -143,13 +152,19 @@ export default function CalendarPage() {
             {months[month - 1]} {year}
           </span>
           <div style={{ display: "flex", gap: "3rem" }}>
-            <ChevronLeft className={styles.chevron} onClick={() => handleMonthChange(month - 1)} />
-            <ChevronRight className={styles.chevron} onClick={() => handleMonthChange(month + 1)} />
+            <ChevronLeft
+              className={styles.chevron}
+              onClick={() => handleMonthChange(month - 1)}
+            />
+            <ChevronRight
+              className={styles.chevron}
+              onClick={() => handleMonthChange(month + 1)}
+            />
           </div>
         </div>
-        <Calendar events={[...currentMonthEvents]} year={year} month={month} />
+        <Calendar selectedDate={selectedDate} year={year} month={month} />
       </div>
-      <EventsListing events={[...currentMonthEvents]} date={new Date(selectedDate)} />
+      <EventsListing date={selectedDate} />
     </div>
   );
 }

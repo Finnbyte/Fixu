@@ -2,11 +2,9 @@ import { eachDayOfInterval, endOfMonth, isSameDay, isToday, startOfMonth, subDay
 import styles from "./Calendar.module.scss";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { setSelectedDate, isDateEventful } from "../../slices/calendar";
+import { setSelectedDate } from "../../slices/calendar";
 import classnames from "classnames";
 import { CalendarEvent, CalendarEventType } from "../../../../backend/db/schemas/calendarEvents";
-import { stringify } from "querystring";
-import { type } from "os";
 import { useMemo } from "react";
 
 function getDatesInMonth(month: number, year: number): Date[] {
@@ -37,7 +35,7 @@ function buildEventsMap(events: CalendarEvent[]) {
 }
 
 interface ICalendarProps {
-  events: CalendarEvent[]
+  selectedDate: Date
   month: number
   year: number
 }
@@ -46,13 +44,13 @@ const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export default function Calendar(props: ICalendarProps) {
   const dispatch = useAppDispatch();
-  const selectedDate = useAppSelector(state => state.calendar.data.selectedDate);
 
   const monthDates = getDatesInMonth(props.month, props.year);
   const offsetDates = getOffsetDatesInMonth(monthDates[0]);
   const dates = [...offsetDates, ...monthDates];
 
-  const events = useMemo(() => buildEventsMap(props.events), [props.events]);
+  const calendarEventsForMonth = useAppSelector(state => state.calendar.data.events);
+  const events = useMemo(() => buildEventsMap(calendarEventsForMonth), [calendarEventsForMonth]);
 
   function Week() {
     return (
@@ -66,7 +64,7 @@ export default function Calendar(props: ICalendarProps) {
                     key={date.getTime()}
                     date={date}
                     isEventful={!!events.get(date.getDate())}
-                    isSelected={isSameDay(selectedDate, date)}
+                    isSelected={isSameDay(props.selectedDate, date)}
                     isCurrentDate={isToday(date)}
                     isPreviousMonthDate={isLastMonthDate(date, props.month)}
                     onClick={(date) =>
