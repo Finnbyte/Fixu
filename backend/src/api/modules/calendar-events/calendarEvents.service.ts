@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../..";
-import { calendarEvents } from "../../../../db/schemas/calendarEvents";
+import { CalendarEvent, calendarEvents } from "../../../../db/schemas/calendarEvents";
 import { CreateCalendarEvent } from "./calendarEvents.schema";
 import { usersCourses } from "../../../../db/schemas/courses";
 import { isSameMonth } from "date-fns";
@@ -35,4 +35,12 @@ export async function fetchCalendarEventByMonth(
 
 export async function createCalendarEvent(calendarEvent: CreateCalendarEvent) {
   await db.insert(calendarEvents).values(calendarEvent);
+}
+
+export async function updateCalendarEvent(calendarEvent: CalendarEvent) {
+  await db.update(calendarEvents).set({ ...calendarEvent }).where(eq(calendarEvents.id, calendarEvent.id));
+}
+
+export async function deleteCalendarEvent(calendarEventId: string) {
+  await db.delete(calendarEvents).where(eq(calendarEvents.id, calendarEventId));
 }
