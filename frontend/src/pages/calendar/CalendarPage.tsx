@@ -30,10 +30,11 @@ function EventListingItem({ event, onDiscard }: { event: CalendarEvent, onDiscar
 
   const titleRef = useRef<HTMLInputElement>(null);
 
-  function handleEventTitleChange() {
-    if (titleRef.current) {
-      const title = titleRef.current.value;
-      dispatch(updateCalendarEvent({ ...event, title }));
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      e.currentTarget.blur()
+    } else if (e.key === "Escape") {
+      onDiscard()
     }
   }
 
@@ -46,6 +47,7 @@ function EventListingItem({ event, onDiscard }: { event: CalendarEvent, onDiscar
       onDiscard()
       return
     }
+
   }
 
   return (
@@ -55,7 +57,7 @@ function EventListingItem({ event, onDiscard }: { event: CalendarEvent, onDiscar
         type="text"
         ref={titleRef}
         defaultValue={event.title}
-        onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
+        onKeyDown={handleKeyDown}
         onBlur={handleInputBlur}
       />
       <span onClick={() => onDiscard()}>
