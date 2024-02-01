@@ -53,7 +53,6 @@ function EventListingItem({ event, onDiscard }: { event: CalendarEvent, onDiscar
   return (
     <li>
       <input
-        autoFocus
         type="text"
         ref={titleRef}
         defaultValue={event.title}
