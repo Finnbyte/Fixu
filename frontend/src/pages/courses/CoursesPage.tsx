@@ -15,7 +15,7 @@ function Course({ title, description, isEnrolled, onMembershipUpdate }: CoursePr
     <div className={styles.course}>
       <img />
       <div className={styles["information-container"]}>
-        {title}
+        <h2>{title}</h2>
         <br/>
         {description}
       </div>
