@@ -40,6 +40,8 @@ export const apiSlice = createApi({
       query: ({ year, month }) => ({
         url: `/calendar-events?year=${year}&month=${month}`
      }),
+      transformResponse: (data: any) => data ?? [],
+      providesTags: ["CalendarEvent"]
     }),
     createCalendarEvent: builder.mutation<void, { event: CalendarEvent }>({
       query: ({ event }) => ({
@@ -47,16 +49,24 @@ export const apiSlice = createApi({
         method: "POST",
         body: event,
       }),
-      invalidatesTags: ["CalendarEvent"],
     }),
     updateCalendarEvent: builder.mutation<
       void,
-      { eventId: string; payload?: CalendarEvent }
+      { event: CalendarEvent }
     >({
-      query: ({ eventId, payload }) => ({
-        url: `/calendar-events/${eventId}`,
+      query: ({ event }) => ({
+        url: `/calendar-events/${event.id}`,
         method: "PUT",
-        body: payload,
+        body: event,
+      }),
+    }),
+    deleteCalendarEvent: builder.mutation<
+      void,
+      { event: CalendarEvent }
+    >({
+      query: ({ event }) => ({
+        url: `/calendar-events/${event.id}`,
+        method: "DELETE",
       }),
     }),
   }),
