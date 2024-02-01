@@ -44,7 +44,12 @@
             text-align: center;
 
             span {
-                padding: 0.4rem;
+                $size: 30px;
+                display: inline-block;
+                width: $size;
+                height: $size;
+                border-radius: 50%;
+                line-height: $size;
             }
         
             &:hover {
@@ -58,7 +63,6 @@
         
             &.today span {
                 background-color: colors.$primary;
-                border-radius: 50%;
             
                 &:hover {
                     background-color: darken(colors.$primary, 10%);
