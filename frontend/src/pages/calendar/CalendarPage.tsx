@@ -82,10 +82,11 @@ function EventsListing({
 
   function handleCreateNewEvent() {
     const newEvent = {
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID(), // Generate a random client-side id which will be overriden server-side
+      date,
       title: "",
       type: "personal",
-    } as CalendarEvent;
+    } as unknown as CalendarEvent;
     setSelectedDateEvents((prev) => [...prev, newEvent]);
   }
 
