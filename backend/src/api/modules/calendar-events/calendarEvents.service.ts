@@ -38,7 +38,7 @@ export async function createCalendarEvent(calendarEvent: CreateCalendarEvent) {
 }
 
 export async function updateCalendarEvent(calendarEvent: CalendarEvent) {
-  await db.update(calendarEvents).set({ ...calendarEvent }).where(eq(calendarEvents.id, calendarEvent.id));
+  await db.update(calendarEvents).set({ ...calendarEvent, date: calendarEvent.date as Date }).where(eq(calendarEvents.id, calendarEvent.id));
 }
 
 export async function deleteCalendarEvent(calendarEventId: string) {

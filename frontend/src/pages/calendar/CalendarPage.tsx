@@ -58,14 +58,14 @@ function EventListingItem({ event, onDiscard }: EventListingItemProps) {
     }
 
     const title = titleRef.current.value;
-    const newEvent = { ...event, title }
+    const newEvent = { ...event, title, date: (event.date as Date).toISOString() }
 
     // We need to know if its updated or a new event
     const isFreshlyCreatedEvent = !isCuid(newEvent.id);
     if (isFreshlyCreatedEvent) {
-      dispatch(addCalendarEvent(event))
+      createCalendarEventQuery({ event: newEvent })
     } else {
-      dispatch(updateCalendarEvent(event))
+      updateCalendarEventQuery({ event: newEvent })
     }
   }
 
@@ -86,6 +86,7 @@ function EventListingItem({ event, onDiscard }: EventListingItemProps) {
 }
 
 function EventsListing({ date }: { date: Date }) {
+  console.log("rerender eventlisting")
   const events = useAppSelector(state => selectEventsByDate(state, date));
   const dispatch = useAppDispatch();
 

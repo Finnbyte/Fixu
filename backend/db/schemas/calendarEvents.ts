@@ -19,5 +19,9 @@ export const calendarEvents = mysqlTable("calendar_events", {
 export const selectCalendarEventSchema = createSelectSchema(calendarEvents);
 export const insertCalendarEventSchema = createInsertSchema(calendarEvents);
 
-export type CalendarEvent = z.infer<typeof selectCalendarEventSchema>;
-export type CalendarEventType = typeof calendarEventTypes[keyof typeof calendarEventTypes];
+export type CalendarEvent = Omit<
+  z.infer<typeof selectCalendarEventSchema>,
+  "date"
+> & { date: string | Date };
+export type CalendarEventType =
+  (typeof calendarEventTypes)[keyof typeof calendarEventTypes];
