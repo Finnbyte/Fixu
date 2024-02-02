@@ -38,18 +38,22 @@ export const calendarSlice = createSlice({
   } as CalendarEventState,
   selectors: {
     selectEventsByDate(state, date: Date) {
-      return state.data.events.filter(event => isSameDay(new Date(event.date), date));
+      return state.data.events.filter((event) =>
+        isSameDay(new Date(event.date), date)
+      );
     },
     isDateEventful(state, date: Date) {
-      return state.data.events.some(event => isSameDay(new Date(event.date), date))
-    }
+      return state.data.events.some((event) =>
+        isSameDay(new Date(event.date), date)
+      );
+    },
   },
   reducers: {
     setSelectedDate: (state, action: PayloadAction<string>) => {
       state.data.selectedDate = action.payload;
     },
     addCalendarEventForUser: (state, action: PayloadAction<CalendarEvent>) => {
-     state.data.events.push(action.payload);
+      state.data.events.push(action.payload);
     },
     updateCalendarEvent: (state, action: PayloadAction<CalendarEvent>) => {
       state.data.events = state.data.events.map((event) => {
@@ -61,14 +65,19 @@ export const calendarSlice = createSlice({
       });
     },
     deleteCalendarEvent: (state, action: PayloadAction<CalendarEvent>) => {
-      state.data.events = state.data.events.filter((event) => event.id !== action.payload.id);
+      state.data.events = state.data.events.filter(
+        (event) => event.id !== action.payload.id
+      );
     },
   },
-  extraReducers: builder => {
-    builder.addMatcher(apiSlice.endpoints.getMonthCalendarEvents.matchFulfilled, (state, { payload }) => {
-      state.data.events = payload;
-    })
-  }
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      apiSlice.endpoints.getMonthCalendarEvents.matchFulfilled,
+      (state, { payload }) => {
+        state.data.events = payload;
+      }
+    );
+  },
 });
 
 export const {setSelectedDate, addCalendarEventForUser: addCalendarEvent, deleteCalendarEvent, updateCalendarEvent } = calendarSlice.actions;

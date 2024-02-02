@@ -39,7 +39,7 @@ export const apiSlice = createApi({
     >({
       query: ({ year, month }) => ({
         url: `/calendar-events?year=${year}&month=${month}`
-     }),
+      }),
       transformResponse: (data: any) => data ?? [],
       providesTags: ["CalendarEvent"]
     }),

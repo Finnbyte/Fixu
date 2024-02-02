@@ -24,7 +24,7 @@ export async function calendarEventsRoute(route: FastifyInstance) {
       preHandler: isAuthenticated
     },
     createCalendarEventHandler
-  )
+  );
 
   route.put(
     "/",
