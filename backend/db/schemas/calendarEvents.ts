@@ -13,7 +13,7 @@ export const calendarEvents = mysqlTable("calendar_events", {
   courseId: cuidId("course_id").references(() => courses.id),
   authorId: cuidId("author_id").references(() => users.id),
   title: varchar("title", { length: 40 }).notNull(),
-  date: date("date", { mode: "string" }).notNull(),
+  date: date("date", { mode: "date" }).notNull(),
 });
 
 export const selectCalendarEventSchema = createSelectSchema(calendarEvents);

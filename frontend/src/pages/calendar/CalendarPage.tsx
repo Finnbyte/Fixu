@@ -2,10 +2,10 @@ import { useRef } from "react";
 import Calendar from "../../components/Calendar/Calendar";
 import { AddCircle, Delete } from "@mui/icons-material"
 import styles from "./CalendarPage.module.scss";
-import { addMonths, format, subMonths } from "date-fns";
+import { addMonths, format, parseISO, subMonths } from "date-fns";
 import { ChevronLeft, ChevronRight } from "react-feather"
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { addCalendarEvent, deleteCalendarEvent, selectEventsByDate, setSelectedDate } from "../../slices/calendar";
+import { addCalendarEvent, deleteCalendarEvent, selectEventsByDate, setSelectedDate, updateCalendarEvent } from "../../slices/calendar";
 import { CalendarEvent } from "../../../../backend/db/schemas/calendarEvents";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useCreateCalendarEventMutation, useGetMonthCalendarEventsQuery, useUpdateCalendarEventMutation } from "../../slices/api";
@@ -63,9 +63,9 @@ function EventListingItem({ event, onDiscard }: EventListingItemProps) {
     // We need to know if its updated or a new event
     const isFreshlyCreatedEvent = !isCuid(newEvent.id);
     if (isFreshlyCreatedEvent) {
-      createCalendarEventQuery({ event: newEvent });
+      dispatch(addCalendarEvent(event))
     } else {
-      updateCalendarEventQuery({ event: newEvent });
+      dispatch(updateCalendarEvent(event))
     }
   }
 
@@ -78,7 +78,7 @@ function EventListingItem({ event, onDiscard }: EventListingItemProps) {
         onKeyDown={handleKeyDown}
         onBlur={handleInputBlur}
       />
-      <span onClick={() => onDiscard()}>
+      <span style={{ cursor: "pointer" }} onClick={() => onDiscard()}>
         <Delete />
       </span>
     </li>

@@ -8,7 +8,7 @@ export async function getUsersCalendarEventsHandler(req: FastifyRequest) {
   const { year, month } = req.query as z.infer<typeof calendarEventQuery>;
   const userId = req.user.id;
   if (year && month) {
-    return await fetchCalendarEventByMonth(userId, year, month)
+    return await fetchCalendarEventByMonth(userId, year, month);
   }
 
   const calendarEvents = await fetchCalendarEvents(userId);
@@ -20,11 +20,10 @@ export async function createCalendarEventHandler(req: FastifyRequest) {
   const calendarEvent = {
     title: body.title,
     type: body.type,
-    date: body.date,
+    date: new Date(body.date),
     authorId: req.user.id
   } as CreateCalendarEvent;
 
-  console.log("Debug", calendarEvent.date)
   await createCalendarEvent(calendarEvent);
 
   return;
@@ -41,5 +40,5 @@ export async function deleteCalendarEventHandler(req: FastifyRequest, reply: Fas
   const { calendarEventId } = req.params as z.infer<typeof calendarEventParams>;
 
   await deleteCalendarEvent(calendarEventId);
-  return reply.code(200).send()
+  return reply.code(200).send();
 }
