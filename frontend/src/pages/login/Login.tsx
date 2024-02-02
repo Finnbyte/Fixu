@@ -17,21 +17,22 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const onSubmit: SubmitHandler<ILoginInputs> = async (data) => {
-    const res = await fetch("/api/session", {
+  const onSubmit: SubmitHandler<ILoginInputs> = (data) => {
+    fetch("/api/session", {
       method: "POST",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },
+    }).then((res) => {
+      if (!res.ok) {
+        res.json().then(payload => setError("root", { message: payload.msg }))
+        return;
+      }
+
+      const searchParams = new URLSearchParams(location.search);
+      navigate(searchParams.get("redirect_to") ?? "/app");
     });
-
-    if (!res.ok) {
-      const errorMessage = (await res.json()).msg;
-      return setError("root", { message: errorMessage });
-    }
-
-    const searchParams = new URLSearchParams(location.search);
-    navigate(searchParams.get("redirect_to") ?? "/app");
   };
+
   return (
     <div className={styles.page}>
       <h1 style={{ fontSize: "3rem" }}>Fixu</h1>
