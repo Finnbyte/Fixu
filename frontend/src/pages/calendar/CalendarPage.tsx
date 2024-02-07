@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Calendar from "../../components/Calendar/Calendar";
 import { AddCircle, Delete } from "@mui/icons-material";
 import styles from "./CalendarPage.module.scss";
@@ -139,14 +139,16 @@ export default function CalendarPage() {
     useAppSelector((state) => state.calendar.data.selectedDate)
   );
 
-  console.log("selected", selectedDate);
-
   const year = selectedDate.getFullYear();
   const month = selectedDate.getMonth() + 1;
 
   // No need to assign since we only care about side effects
   // Check extraReducers in calendarSlice
-  useGetMonthCalendarEventsQuery({ year, month });
+  const { refetch: refetchMonthEvents } = useGetMonthCalendarEventsQuery({ year, month });
+
+  useEffect(() => {
+    refetchMonthEvents();
+  }, [month, year, refetchMonthEvents])
 
   function handleMonthChange(newMonth: number) {
     // do this instead of setMonths since it doesn't account for year change
