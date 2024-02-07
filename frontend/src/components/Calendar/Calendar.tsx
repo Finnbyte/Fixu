@@ -6,6 +6,7 @@ import { setSelectedDate } from "../../slices/calendar";
 import classnames from "classnames";
 import { CalendarEvent, CalendarEventType } from "../../../../backend/db/schemas/calendarEvents";
 import { useMemo } from "react";
+import { ChevronLeft, ChevronRight } from "react-feather";
 
 function getDatesInMonth(month: number, year: number): Date[] {
   const start = startOfMonth(new Date(year, month - 1, 15));
@@ -38,7 +39,23 @@ interface ICalendarProps {
   selectedDate: Date
   month: number
   year: number
+  onScrollMonth: (newMonth: number) => void
 }
+
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
 
 const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -82,6 +99,21 @@ export default function Calendar(props: ICalendarProps) {
 
   return (
     <table id={styles.calendar}>
+      <tr className={styles["top-row"]}>
+        <th style={{ fontSize: "1.5rem" }}>
+          {months[props.month - 1]} {props.year}
+        </th>
+        <div style={{ display: "flex", gap: "3rem" }}>
+          <ChevronLeft
+            className={styles.chevron}
+            onClick={() => props.onScrollMonth(props.month - 1)}
+          />
+          <ChevronRight
+            className={styles.chevron}
+            onClick={() => props.onScrollMonth(props.month + 1)}
+          />
+        </div>
+      </tr>
       <tr>
         {dayLabels.map((label) => (
           <th key={label}>

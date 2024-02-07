@@ -9,6 +9,13 @@
     background-color: darken(white, 50%);
 }
 
+.chevron {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    color: white;
+}
+
 #calendar {
     width: 100%;
     display: grid;
@@ -22,10 +29,19 @@
 
     tr,
     tbody {
-        grid-column: 1 / -1;
         display: grid;
+        grid-column: 1 / -1;
         grid-template-columns: repeat(7, 1fr);
         width: 100%;
+    }
+
+    .top-row {
+        --x-padding: calc(15.4rem - 10vw);
+
+        display: flex;
+        color: white;
+        padding: 1rem var(--x-padding);
+        justify-content: space-between;
     }
 
     .week {
@@ -39,7 +55,7 @@
             row-gap: 20px;
             cursor: pointer;
             user-select: none;
-            padding: 1rem 2rem;
+            padding: 1rem;
             border-radius: 5px;
             text-align: center;
 
