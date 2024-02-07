@@ -1,16 +1,16 @@
-import React from 'react'
 import "./index.scss";
-import ReactDOM from 'react-dom/client'
 import { RouteObject, RouterProvider, createBrowserRouter } from 'react-router-dom';
-import Login from './pages/login/Login.tsx';
-import Register from './pages/register/Register.tsx';
-import CoursesPage from './pages/courses/CoursesPage.tsx';
-import Dashboard from './pages/dashboard/DashboardPage.tsx';
-import { AuthGuard } from './components/AuthGuard/AuthGuard.tsx';
-import Settings from './pages/settings/Settings.tsx';
-import CalendarPage from './pages/calendar/CalendarPage.tsx';
+import Login from './pages/login/Login';
+import Register from './pages/register/Register';
+import CoursesPage from './pages/courses/CoursesPage';
+import Dashboard from './pages/dashboard/DashboardPage';
+import { AuthGuard } from './components/AuthGuard/AuthGuard';
+import Settings from './pages/settings/Settings';
+import CalendarPage from './pages/calendar/CalendarPage';
 import { Provider } from 'react-redux';
-import { store } from './store.ts';
+import { store } from './store';
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 
 export const ROUTES: RouteObject[] = [
   {
@@ -53,10 +53,11 @@ export const ROUTES: RouteObject[] = [
 
 const router = createBrowserRouter(ROUTES);
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
