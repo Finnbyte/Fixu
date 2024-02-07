@@ -13,9 +13,13 @@ function getRecentlyViewedCourses(): Course[] | null {
 }
 
 export default function Dashboard() {
+  const recentlyViewedCourses = getRecentlyViewedCourses();
   return (
     <div className={styles.page}>
       <h1>My recently viewed courses</h1>
+      {!!recentlyViewedCourses && recentlyViewedCourses.map(course => {
+        return <p>{JSON.stringify(course)}</p>
+      })}
     </div>
   )
 }
