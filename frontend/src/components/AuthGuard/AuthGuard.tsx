@@ -4,9 +4,7 @@ import { useGetUserDataQuery } from "../../slices/api";
 
 function createRedirectURL(pathname: string) {
   let URL = "/login";
-  if (pathname !== "/") {
-    URL += `?redirect_to=${pathname}`
-  }
+  if (pathname !== "/") URL += `?redirect_to=${pathname}`;
   return URL;
 }
 
