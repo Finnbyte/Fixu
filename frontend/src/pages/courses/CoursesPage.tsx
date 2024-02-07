@@ -48,22 +48,24 @@ export default function CoursesPage() {
           Create a course
         </button>
       )}
-      {courses.map((course) => {
-        const { id, name, description } = course;
-        const isEnrolled = enrolledCourses.includes(course.id);
-        return (
-          <Course
-            key={id}
-            title={name}
-            description={description}
-            isEnrolled={isEnrolled}
-            onMembershipUpdate={(status) => {
-              console.log({ status, userId: user.id, courseId: id });
-              updateEnrollment({ status, userId: user.id, courseId: id });
-            }}
-          />
-        );
-      })}
+      <div className={styles["courses-container"]}>
+        {courses.map((course) => {
+          const { id, name, description } = course;
+          const isEnrolled = enrolledCourses.includes(course.id);
+          return (
+            <Course
+              key={id}
+              title={name}
+              description={description}
+              isEnrolled={isEnrolled}
+              onMembershipUpdate={(status) => {
+                console.log({ status, userId: user.id, courseId: id });
+                updateEnrollment({ status, userId: user.id, courseId: id });
+              }}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
