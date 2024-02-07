@@ -2,7 +2,7 @@ import { SerializedError } from "@reduxjs/toolkit";
 
 export type ActionStatus = "idle" | "loading" | "succeeded" | "failed";
 
-export function createInitialState<T>(data: T) {
+export function createInitialState<T>(data: T | T[]) {
   return {
     data,
     status: "idle",
