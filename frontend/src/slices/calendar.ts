@@ -30,11 +30,6 @@ export const calendarSlice = createSlice({
         isSameDay(new Date(event.date), date)
       );
     },
-    isDateEventful(state, date: Date) {
-      return state.data.events.some((event) =>
-        isSameDay(new Date(event.date), date)
-      );
-    },
   },
   reducers: {
     setSelectedDate: (state, action: PayloadAction<string>) => {
@@ -69,4 +64,4 @@ export const calendarSlice = createSlice({
 });
 
 export const {setSelectedDate, addCalendarEventForUser: addCalendarEvent, deleteCalendarEvent, updateCalendarEvent } = calendarSlice.actions;
-export const { isDateEventful, selectEventsByDate } = calendarSlice.selectors;
+export const { selectEventsByDate } = calendarSlice.selectors;
