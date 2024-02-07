@@ -39,18 +39,20 @@ export const calendarSlice = createSlice({
       state.data.events.push(action.payload);
     },
     updateCalendarEvent: (state, action: PayloadAction<CalendarEvent>) => {
-      state.data.events = state.data.events.map((event) => {
+      for (const [i, event] of state.data.events.entries()) {
         if (event.id === action.payload.id) {
-          return action.payload;
+          state.data.events[i] = action.payload;
+          return;
         }
-
-        return event;
-      });
+      }
     },
     deleteCalendarEvent: (state, action: PayloadAction<CalendarEvent>) => {
-      state.data.events = state.data.events.filter(
-        (event) => event.id !== action.payload.id
-      );
+      for (const [i, event] of state.data.events.entries()) {
+        if (event.id === action.payload.id) {
+          state.data.events.splice(i, 1);
+          return;
+        }
+      }
     },
   },
   extraReducers: (builder) => {
