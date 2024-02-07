@@ -40,6 +40,7 @@ export const apiSlice = createApi({
       query: ({ year, month }) => ({
         url: `/calendar-events?year=${year}&month=${month}`
       }),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       transformResponse: (data: any) => data ?? [],
       providesTags: ["CalendarEvent"]
     }),
