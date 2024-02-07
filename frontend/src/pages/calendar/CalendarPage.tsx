@@ -142,7 +142,7 @@ export default function CalendarPage() {
   const year = selectedDate.getFullYear();
   const month = selectedDate.getMonth() + 1;
 
-  // No need to assign since we only care about side effects
+  // No need to assign to any data since we only care about side effects
   // Check extraReducers in calendarSlice
   const { refetch: refetchMonthEvents } = useGetMonthCalendarEventsQuery({ year, month });
 
