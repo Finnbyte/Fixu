@@ -26,16 +26,16 @@ export const userSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchUserData.pending, (state) => {
-        console.log("wisdjisjdi")
+        console.log("user data fetch pending")
         state.status = "loading";
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
-        console.log("x")
+        console.log("user data fetch fulfilled")
         state.status = "succeeded";
-        state.data = action.payload;
+        state.data = action.payload!;
       })
       .addCase(fetchUserData.rejected, (state, action) => {
-        console.log("y")
+        console.log("user data fetch rejected")
         state.status = "failed";
         state.error = action.error;
       });
