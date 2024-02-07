@@ -8,6 +8,19 @@
     background-color: darken(white, 50%);
 }
 
+.event-preview-title {
+    display: inline-block;
+    font-size: 15px;
+    padding: 0.1rem 0.3rem;
+    margin: 0;
+    max-width: 12ch;
+    overflow: hidden;
+    background-color:crimson;
+    border-radius: 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .calendar-day {
     display: flex;
     flex-direction: column;

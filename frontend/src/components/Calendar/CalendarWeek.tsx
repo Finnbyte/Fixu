@@ -24,7 +24,7 @@ export function CalendarWeek({ month, dates }: ICalendarWeekProps) {
           <CalendarDay
             key={date.getTime()}
             date={date}
-            isEventful={eventsForMonth.some((e) => isSameDay(e.date, date))}
+            previewEvent={eventsForMonth.find((e) => isSameDay(e.date, date))}
             isSelected={isSameDay(selectedDate, date)}
             isCurrentDate={isToday(date)}
             isPreviousMonthDate={isLastMonthDate(date, month)}
