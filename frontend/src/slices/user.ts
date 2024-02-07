@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction, SerializedError } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../../backend/db/schemas/users";
-import { ActionStatus } from "./common";
+import { createInitialState } from "./common";
 
 export const fetchUserData = createAsyncThunk("user/fetchUserData", async (userId: string) => {
   const res = await fetch(`/api/users/${userId}`, {
@@ -15,15 +15,9 @@ export const fetchUserData = createAsyncThunk("user/fetchUserData", async (userI
   return data
 })
 
-interface UserState {
-    data: User | null;
-    status: ActionStatus;
-    error: SerializedError | null;
-}
-
 export const userSlice = createSlice({
   name: "user",
-  initialState: { data: null, status: "idle", error: null } as UserState,
+  initialState: createInitialState<User>([]),
   reducers: {
     setUserData: (state, action: PayloadAction<User>) => {
       state.data = action.payload;

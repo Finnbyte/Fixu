@@ -1,19 +1,8 @@
-import { ActionStatus } from "./common"
+import { createInitialState } from "./common"
 import { CalendarEvent } from "../../../backend/db/schemas/calendarEvents";
-import { SerializedError, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isPast, isSameDay } from "date-fns";
 import { apiSlice } from "./api";
-
-interface CalendarStateData {
-  events: CalendarEvent[]
-  selectedDate: string
-}
-
-interface CalendarEventState {
-    data: CalendarStateData
-    status: ActionStatus;
-    error: SerializedError | null;
-}
 
 function getInitialSelectedDate() {
   const isDateCached = localStorage.getItem("calendarSelectedDate")
@@ -31,11 +20,10 @@ function getInitialSelectedDate() {
 
 export const calendarSlice = createSlice({
   name: "calendar",
-  initialState: {
-    data: { events: [], selectedDate: getInitialSelectedDate() },
-    status: "idle",
-    error: null,
-  } as CalendarEventState,
+  initialState: createInitialState<{
+    events: CalendarEvent[];
+    selectedDate: string;
+  }>({ events: [], selectedDate: getInitialSelectedDate() }),
   selectors: {
     selectEventsByDate(state, date: Date) {
       return state.data.events.filter((event) =>
