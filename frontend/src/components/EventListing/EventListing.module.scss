@@ -1,0 +1,29 @@
+.events-listing {
+    width: 400px;
+    height: 100vh;
+    padding-top: 0;
+    background-color: lighten(colors.$surface, 10%);
+
+    * { color: white; }
+
+    .top-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: larger;
+        padding: 2rem;
+        background-color: colors.$surface-variant;
+    }
+
+    input[type="text"] {
+        font-size: larger;
+        background: transparent;
+        outline: none;
+        border: none;
+    }
+
+    ul > li > div {
+        display: flex;
+        justify-content: space-between;
+        margin-right: 15px;
+    }
+}
