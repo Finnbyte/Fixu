@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import CourseViewPage, { courseViewPageLoader } from "./pages/course-view/CourseViewPage";
 
 export const ROUTES: RouteObject[] = [
   {
@@ -19,9 +20,7 @@ export const ROUTES: RouteObject[] = [
   },
   {
     path: "/app",
-    element: (
-      <AuthGuard />
-    ),
+    element: <AuthGuard />,
     children: [
       {
         element: <Dashboard />,
@@ -30,6 +29,11 @@ export const ROUTES: RouteObject[] = [
       {
         path: "courses",
         element: <CoursesPage />,
+      },
+      {
+        path: "courses/:courseId",
+        element: <CourseViewPage />,
+        loader: courseViewPageLoader,
       },
       {
         path: "settings",
