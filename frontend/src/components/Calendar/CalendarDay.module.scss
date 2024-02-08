@@ -1,13 +1,5 @@
 @use "../../colors";
 
-.event-dot {
-    display: inline;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background-color: darken(white, 50%);
-}
-
 .event-preview-title {
     display: inline-block;
     font-size: 15px;
