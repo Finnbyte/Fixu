@@ -1,7 +1,7 @@
 # Fixu
 Fixu is an (extremely) simple Moodle clone with my own twists. It mostly focuses around a **calendar** which shows courses' deadlines, exams or even the user's own personal events.
 
-# Quickstart
+## Quickstart
 ```console
 git clone https://github.com/Finnbyte/Fixu
 cd Fixu
