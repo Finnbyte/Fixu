@@ -1,7 +1,7 @@
 import styles from "./CoursesPage.module.scss";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useRef } from "react";
-import { useGetCoursesQuery, useGetEnrolledCoursesQuery, useUpdateEnrollmentStatusMutation } from "../../slices/api";
+import { useGetCoursesQuery, useGetEnrolledCoursesQuery } from "../../slices/api";
 
 interface CourseProps {
   title: string;
@@ -19,9 +19,6 @@ function Course({ title, description, isEnrolled, onMembershipUpdate }: CoursePr
         <br/>
         {description}
       </div>
-      <button onClick={() => onMembershipUpdate(isEnrolled ? "leave" : "join")}>
-        {isEnrolled ? "Leave course" : "Join course"}
-      </button>
     </div>
   )
 }
@@ -30,7 +27,6 @@ export default function CoursesPage() {
   const user = useAppSelector((state) => state.user.data!);
   const { data: courses } = useGetCoursesQuery();
   const { data: enrolledCourses } = useGetEnrolledCoursesQuery(user.id);
-  const [updateEnrollment] = useUpdateEnrollmentStatusMutation();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -50,18 +46,11 @@ export default function CoursesPage() {
       )}
       <div className={styles["courses-container"]}>
         {courses.map((course) => {
-          const { id, name, description } = course;
-          const isEnrolled = enrolledCourses.includes(course.id);
           return (
             <Course
               key={id}
               title={name}
               description={description}
-              isEnrolled={isEnrolled}
-              onMembershipUpdate={(status) => {
-                console.log({ status, userId: user.id, courseId: id });
-                updateEnrollment({ status, userId: user.id, courseId: id });
-              }}
             />
           );
         })}
