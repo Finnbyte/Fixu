@@ -2,23 +2,30 @@ import styles from "./CoursesPage.module.scss";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useRef } from "react";
 import { useGetCoursesQuery, useGetEnrolledCoursesQuery } from "../../slices/api";
+import { format } from "date-fns";
 
 interface CourseProps {
-  title: string;
+  name: string;
   description: string;
-  isEnrolled: boolean;
-  onMembershipUpdate: (type: "join" | "leave") => void;
+  createdAt: Date;
+  endedAt: Date | null;
 }
 
-function Course({ title, description, isEnrolled, onMembershipUpdate }: CourseProps) {
+function CourseCard({ name, description, createdAt, endedAt }: CourseProps) {
+  function formatDate(date: Date) {
+    return format(date, "dd MMMM yyyy");
+  }
   return (
     <div className={styles.course}>
       <img />
       <div className={styles["information-container"]}>
-        <h2>{title}</h2>
+        <h2>{name}</h2>
         <br/>
-        {description}
+        {description || "No description"}
+        <br/><br/>
+        <span style={{ opacity: "0.55", fontWeight: "bold" }}>{formatDate(createdAt)} - {`${endedAt && formatDate(endedAt)}`}</span>
       </div>
+      <button>View course</button>
     </div>
   )
 }
@@ -47,10 +54,9 @@ export default function CoursesPage() {
       <div className={styles["courses-container"]}>
         {courses.map((course) => {
           return (
-            <Course
-              key={id}
-              title={name}
-              description={description}
+            <CourseCard
+              key={course.id}
+              {...course}
             />
           );
         })}
