@@ -41,12 +41,15 @@ export const isAuthenticated = async (
   reply: FastifyReply,
 ) => {
   const tokenPayload = await getTokenPayloadFromHeader(req);
+  console.log("token payload:", tokenPayload);
   if (!tokenPayload) {
+    console.log("1");
     throw reply.code(401).send({ msg: "Invalid authentication" });
   }
 
   const user = await fetchUserById(tokenPayload!.userId);
   if (!user) {
+    console.log("2");
     throw reply.code(401).send({ msg: "Invalid authentication" });
   }
 

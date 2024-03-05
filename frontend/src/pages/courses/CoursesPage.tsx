@@ -1,27 +1,31 @@
 import styles from "./CoursesPage.module.scss";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useRef } from "react";
-import { useGetCoursesQuery, useGetEnrolledCoursesQuery, useUpdateEnrollmentStatusMutation } from "../../slices/api";
+import { useGetCoursesQuery, useGetEnrolledCoursesQuery } from "../../slices/api";
+import { format } from "date-fns";
 
 interface CourseProps {
-  title: string;
+  name: string;
   description: string;
-  isEnrolled: boolean;
-  onMembershipUpdate: (type: "join" | "leave") => void;
+  createdAt: Date;
+  endedAt: Date | null;
 }
 
-function Course({ title, description, isEnrolled, onMembershipUpdate }: CourseProps) {
+function CourseCard({ name, description, createdAt, endedAt }: CourseProps) {
+  function formatDate(date: Date) {
+    return format(date, "dd MMMM yyyy");
+  }
   return (
     <div className={styles.course}>
       <img />
       <div className={styles["information-container"]}>
-        <h2>{title}</h2>
+        <h2>{name}</h2>
         <br/>
-        {description}
+        {description || "No description"}
+        <br/><br/>
+        <span style={{ opacity: "0.55", fontWeight: "bold" }}>{formatDate(createdAt)} - {`${endedAt && formatDate(endedAt)}`}</span>
       </div>
-      <button onClick={() => onMembershipUpdate(isEnrolled ? "leave" : "join")}>
-        {isEnrolled ? "Leave course" : "Join course"}
-      </button>
+      <button>View course</button>
     </div>
   )
 }
@@ -30,7 +34,6 @@ export default function CoursesPage() {
   const user = useAppSelector((state) => state.user.data!);
   const { data: courses } = useGetCoursesQuery();
   const { data: enrolledCourses } = useGetEnrolledCoursesQuery(user.id);
-  const [updateEnrollment] = useUpdateEnrollmentStatusMutation();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -50,18 +53,10 @@ export default function CoursesPage() {
       )}
       <div className={styles["courses-container"]}>
         {courses.map((course) => {
-          const { id, name, description } = course;
-          const isEnrolled = enrolledCourses.includes(course.id);
           return (
-            <Course
-              key={id}
-              title={name}
-              description={description}
-              isEnrolled={isEnrolled}
-              onMembershipUpdate={(status) => {
-                console.log({ status, userId: user.id, courseId: id });
-                updateEnrollment({ status, userId: user.id, courseId: id });
-              }}
+            <CourseCard
+              key={course.id}
+              {...course}
             />
           );
         })}

@@ -1,14 +1,6 @@
 @use "../../colors";
 @use "sass:color";
 
-.dot {
-    display: inline;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background-color: darken(white, 50%);
-}
-
 .chevron {
     cursor: pointer;
     width: 30px;
@@ -39,9 +31,10 @@
         --x-padding: calc(15.4rem - 10vw);
 
         display: flex;
-        color: white;
-        padding: 1rem var(--x-padding);
+        margin-bottom: 1.5rem;
+        flex-direction: row;
         justify-content: space-between;
+        color: white;
     }
 
     .week {

@@ -10,7 +10,6 @@ import { EventListingItem } from "./EventListingItem";
 import styles from "./EventListing.module.scss";
 
 export function EventsListing({ date }: { date: Date }) {
-  console.log("rerender eventlisting");
   const events = useAppSelector((state) => selectEventsByDate(state, date));
   const [deleteCalendarEventQuery] = useDeleteCalendarEventMutation();
   const dispatch = useAppDispatch();
@@ -21,7 +20,6 @@ export function EventsListing({ date }: { date: Date }) {
       date: date.toISOString(),
       title: "",
       type: "personal",
-      isPushed: false,
     } as unknown as CalendarEvent;
     dispatch(addCalendarEvent(newEvent));
   }
@@ -30,7 +28,7 @@ export function EventsListing({ date }: { date: Date }) {
     if (event.title === "") {
       dispatch(deleteCalendarEvent(event));
     } else {
-      // TODO discard from db
+      dispatch(deleteCalendarEvent(event));
       deleteCalendarEventQuery({ event });
     }
   }
@@ -38,7 +36,7 @@ export function EventsListing({ date }: { date: Date }) {
   return (
     <div className={styles["events-listing"]}>
       <div className={styles["top-row"]}>
-        <span>{format(date, "MMM d, EEEE")}</span>
+        <span style={{ fontSize: "23px", fontWeight: "600" }}>{format(date, "MMM d, EEEE")}</span>
         <div style={{ cursor: "pointer" }} onClick={handleCreateNewEvent}>
           <AddCircle />
         </div>
