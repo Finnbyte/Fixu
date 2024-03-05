@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { useGetCoursesQuery, useGetEnrolledCoursesQuery } from "../../slices/api";
 import { format } from "date-fns";
 import "../../_common.scss";
+import { MoreVertical } from "react-feather";
 
 interface CourseProps {
   name: string;
@@ -23,7 +24,10 @@ function CourseCard({ name, description, createdAt, endedAt, onView }: CoursePro
     <div className={styles.course}>
       <img />
       <div className={styles["information-container"]}>
-        <h2>{name}</h2>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <h2>{name}</h2>
+          <MoreVertical style={{ marginBottom: "30px" }} size={28} />
+        </div>
         <br/>
         {description || "No description"}
         <br/><br/>
