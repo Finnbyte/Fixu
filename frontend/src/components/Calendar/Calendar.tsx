@@ -38,7 +38,7 @@ export default function Calendar(props: ICalendarProps) {
         <th style={{ fontSize: "1.5rem" }}>
           {months[props.month - 1]} {props.year}
         </th>
-        <div style={{ display: "flex", gap: "3rem" }}>
+        <div style={{ display: "flex", gap: "2rem" }}>
           <ChevronLeft
             className={styles.chevron}
             onClick={() => props.onScrollMonth(props.month - 1)}
