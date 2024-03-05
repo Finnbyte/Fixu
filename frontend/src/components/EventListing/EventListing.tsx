@@ -36,7 +36,7 @@ export function EventsListing({ date }: { date: Date }) {
   return (
     <div className={styles["events-listing"]}>
       <div className={styles["top-row"]}>
-        <span>{format(date, "MMM d, EEEE")}</span>
+        <span style={{ fontSize: "23px", fontWeight: "600" }}>{format(date, "MMM d, EEEE")}</span>
         <div style={{ cursor: "pointer" }} onClick={handleCreateNewEvent}>
           <AddCircle />
         </div>
