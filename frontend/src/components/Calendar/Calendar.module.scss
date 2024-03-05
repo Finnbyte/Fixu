@@ -31,6 +31,8 @@
         --x-padding: calc(15.4rem - 10vw);
 
         display: flex;
+        margin-bottom: 1.5rem;
+        flex-direction: row;
         justify-content: space-between;
         color: white;
     }
