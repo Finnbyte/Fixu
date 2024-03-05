@@ -1,0 +1,15 @@
+@use "./_colors.scss";
+
+.material-btn {
+    outline: none;
+    border: none;
+    background-color: colors.$primary;
+    padding: 0.6rem 2.2rem;
+    border-radius: 25px;
+    color: white;
+
+    &:hover {
+        cursor: pointer;
+        background-color: darken(colors.$primary, 10%);
+    }
+}
