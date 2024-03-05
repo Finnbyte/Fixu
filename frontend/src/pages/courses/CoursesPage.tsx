@@ -3,6 +3,7 @@ import { useAppSelector } from "../../hooks/useAppSelector";
 import { useRef } from "react";
 import { useGetCoursesQuery, useGetEnrolledCoursesQuery } from "../../slices/api";
 import { format } from "date-fns";
+import "../../_common.scss";
 
 interface CourseProps {
   name: string;
@@ -25,7 +26,9 @@ function CourseCard({ name, description, createdAt, endedAt }: CourseProps) {
         <br/><br/>
         <span style={{ opacity: "0.55", fontWeight: "bold" }}>{formatDate(createdAt)} - {`${endedAt && formatDate(endedAt)}`}</span>
       </div>
-      <button>View course</button>
+      <div style={{ display: "inline-block", marginLeft: "auto" }}>
+        <button onClick={() => onView()} className={"material-btn"}>View</button>
+      </div>
     </div>
   )
 }
