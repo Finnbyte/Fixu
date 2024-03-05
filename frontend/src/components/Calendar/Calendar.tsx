@@ -35,19 +35,21 @@ export default function Calendar(props: ICalendarProps) {
   return (
     <table id={styles.calendar}>
       <tr className={styles["top-row"]}>
-        <th style={{ fontSize: "1.5rem" }}>
-          {months[props.month - 1]} {props.year}
-        </th>
-        <div style={{ display: "flex", gap: "2rem" }}>
+        <th>
           <ChevronLeft
             className={styles.chevron}
             onClick={() => props.onScrollMonth(props.month - 1)}
           />
+        </th>
+        <th style={{ fontSize: "1.7rem" }}>
+          {months[props.month - 1]} {props.year}
+        </th>
+        <th>
           <ChevronRight
             className={styles.chevron}
             onClick={() => props.onScrollMonth(props.month + 1)}
           />
-        </div>
+        </th>
       </tr>
       <tr>
         {dayLabels.map((label) => (
