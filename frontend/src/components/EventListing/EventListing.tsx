@@ -20,7 +20,6 @@ export function EventsListing({ date }: { date: Date }) {
       date: date.toISOString(),
       title: "",
       type: "personal",
-      isPushed: false,
     } as unknown as CalendarEvent;
     dispatch(addCalendarEvent(newEvent));
   }
