@@ -29,7 +29,7 @@ export function EventsListing({ date }: { date: Date }) {
     if (event.title === "") {
       dispatch(deleteCalendarEvent(event));
     } else {
-      // TODO discard from db
+      dispatch(deleteCalendarEvent(event));
       deleteCalendarEventQuery({ event });
     }
   }
