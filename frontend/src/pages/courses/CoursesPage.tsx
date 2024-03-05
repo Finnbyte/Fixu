@@ -1,5 +1,6 @@
 import styles from "./CoursesPage.module.scss";
 import { useAppSelector } from "../../hooks/useAppSelector";
+import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { useGetCoursesQuery, useGetEnrolledCoursesQuery } from "../../slices/api";
 import { format } from "date-fns";
@@ -10,12 +11,14 @@ interface CourseProps {
   description: string;
   createdAt: Date;
   endedAt: Date | null;
+  onView: () => void;
 }
 
-function CourseCard({ name, description, createdAt, endedAt }: CourseProps) {
+function CourseCard({ name, description, createdAt, endedAt, onView }: CourseProps) {
   function formatDate(date: Date) {
     return format(date, "dd MMMM yyyy");
   }
+
   return (
     <div className={styles.course}>
       <img />
@@ -35,6 +38,7 @@ function CourseCard({ name, description, createdAt, endedAt }: CourseProps) {
 
 export default function CoursesPage() {
   const user = useAppSelector((state) => state.user.data!);
+  const navigate = useNavigate();
   const { data: courses } = useGetCoursesQuery();
   const { data: enrolledCourses } = useGetEnrolledCoursesQuery(user.id);
 
@@ -59,6 +63,7 @@ export default function CoursesPage() {
           return (
             <CourseCard
               key={course.id}
+              onView={() => navigate(`${course.id}`, { relative: "path" })}
               {...course}
             />
           );
