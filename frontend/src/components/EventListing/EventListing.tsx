@@ -10,7 +10,6 @@ import { EventListingItem } from "./EventListingItem";
 import styles from "./EventListing.module.scss";
 
 export function EventsListing({ date }: { date: Date }) {
-  console.log("rerender eventlisting");
   const events = useAppSelector((state) => selectEventsByDate(state, date));
   const [deleteCalendarEventQuery] = useDeleteCalendarEventMutation();
   const dispatch = useAppDispatch();
