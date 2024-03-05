@@ -41,7 +41,7 @@ export default function Calendar(props: ICalendarProps) {
             onClick={() => props.onScrollMonth(props.month - 1)}
           />
         </th>
-        <th style={{ fontSize: "1.7rem" }}>
+        <th style={{ fontSize: "1.9rem" }}>
           {months[props.month - 1]} {props.year}
         </th>
         <th>
