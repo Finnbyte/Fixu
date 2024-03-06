@@ -27,7 +27,10 @@ export async function createSessionHandler(req: FastifyRequest, reply: FastifyRe
   const token = signJwtToken({ userId: user.id as string });
 
   reply.setCookie(AUTHORIZATION_COOKIE, `Bearer ${token}`, {
+    path: "/api",
     httpOnly: true,
+    sameSite: "none",
+    secure: true
   });
   reply.code(204).send();
 }
