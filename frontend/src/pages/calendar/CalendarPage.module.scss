@@ -1,12 +1,5 @@
 @use "../../colors";
 
-.chevron {
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    color: white;
-}
-
 .page {
     display: flex;
     justify-content: space-between;
@@ -18,40 +11,5 @@
         flex-direction: column;
         justify-content: center;
         width: 80%; height: 100%;
-    }
-
-    .top-row {
-        display: flex;
-        justify-content: space-between;
-    }
-}
-
-.events-listing {
-    width: 400px;
-    height: 100vh;
-    padding-top: 0;
-    background-color: lighten(colors.$surface, 10%);
-
-    * {
-        color: white;
-    }
-
-    .top-row {
-        font-size: larger;
-        padding: 2rem;
-        background-color: colors.$surface-variant;
-    }
-
-    input[type="text"] {
-        font-size: larger;
-        background: transparent;
-        outline: none;
-        border: none;
-    }
-
-    ul > li {
-        display: flex;
-        justify-content: space-between;
-        margin: 10px 0;
     }
 }

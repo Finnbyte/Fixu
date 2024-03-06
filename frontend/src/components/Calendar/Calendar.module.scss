@@ -1,12 +1,11 @@
 @use "../../colors";
 @use "sass:color";
 
-.dot {
-    display: inline;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background-color: darken(white, 50%);
+.chevron {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    color: white;
 }
 
 #calendar {
@@ -22,10 +21,20 @@
 
     tr,
     tbody {
-        grid-column: 1 / -1;
         display: grid;
+        grid-column: 1 / -1;
         grid-template-columns: repeat(7, 1fr);
         width: 100%;
+    }
+
+    .top-row {
+        --x-padding: calc(15.4rem - 10vw);
+
+        display: flex;
+        margin-bottom: 1.5rem;
+        flex-direction: row;
+        justify-content: space-between;
+        color: white;
     }
 
     .week {
@@ -39,7 +48,7 @@
             row-gap: 20px;
             cursor: pointer;
             user-select: none;
-            padding: 1rem 2rem;
+            padding: 1rem;
             border-radius: 5px;
             text-align: center;
 

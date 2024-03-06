@@ -5,9 +5,7 @@ import { authService } from "../../auth/authService";
 
 function createRedirectURL(pathname: string) {
   let URL = "/login";
-  if (pathname !== "/") {
-    URL += `?redirect_to=${pathname}`
-  }
+  if (pathname !== "/") URL += `?redirect_to=${pathname}`;
   return URL;
 }
 

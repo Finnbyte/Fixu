@@ -1,19 +1,8 @@
-import { ActionStatus } from "./common"
+import { createInitialState } from "./common"
 import { CalendarEvent } from "../../../backend/db/schemas/calendarEvents";
-import { SerializedError, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { isPast, isSameDay } from "date-fns";
 import { apiSlice } from "./api";
-
-interface CalendarStateData {
-  events: CalendarEvent[]
-  selectedDate: string
-}
-
-interface CalendarEventState {
-    data: CalendarStateData
-    status: ActionStatus;
-    error: SerializedError | null;
-}
 
 function getInitialSelectedDate() {
   const isDateCached = localStorage.getItem("calendarSelectedDate")
@@ -31,19 +20,13 @@ function getInitialSelectedDate() {
 
 export const calendarSlice = createSlice({
   name: "calendar",
-  initialState: {
-    data: { events: [], selectedDate: getInitialSelectedDate() },
-    status: "idle",
-    error: null,
-  } as CalendarEventState,
+  initialState: createInitialState<{
+    events: CalendarEvent[];
+    selectedDate: string;
+  }>({ events: [], selectedDate: getInitialSelectedDate() }),
   selectors: {
     selectEventsByDate(state, date: Date) {
       return state.data.events.filter((event) =>
-        isSameDay(new Date(event.date), date)
-      );
-    },
-    isDateEventful(state, date: Date) {
-      return state.data.events.some((event) =>
         isSameDay(new Date(event.date), date)
       );
     },
@@ -56,18 +39,20 @@ export const calendarSlice = createSlice({
       state.data.events.push(action.payload);
     },
     updateCalendarEvent: (state, action: PayloadAction<CalendarEvent>) => {
-      state.data.events = state.data.events.map((event) => {
+      for (const [i, event] of state.data.events.entries()) {
         if (event.id === action.payload.id) {
-          return action.payload;
+          state.data.events[i] = action.payload;
+          return;
         }
-
-        return event;
-      });
+      }
     },
     deleteCalendarEvent: (state, action: PayloadAction<CalendarEvent>) => {
-      state.data.events = state.data.events.filter(
-        (event) => event.id !== action.payload.id
-      );
+      for (const [i, event] of state.data.events.entries()) {
+        if (event.id === action.payload.id) {
+          state.data.events.splice(i, 1);
+          return;
+        }
+      }
     },
   },
   extraReducers: (builder) => {
@@ -81,4 +66,4 @@ export const calendarSlice = createSlice({
 });
 
 export const {setSelectedDate, addCalendarEventForUser: addCalendarEvent, deleteCalendarEvent, updateCalendarEvent } = calendarSlice.actions;
-export const { isDateEventful, selectEventsByDate } = calendarSlice.selectors;
+export const { selectEventsByDate } = calendarSlice.selectors;
