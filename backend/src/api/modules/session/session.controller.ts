@@ -36,8 +36,8 @@ export async function createSessionHandler(req: FastifyRequest, reply: FastifyRe
 }
 
 export async function deleteSessionHandler(req: FastifyRequest, reply: FastifyReply) {
-    maxAge: -1,
   reply.cookie(AUTHORIZATION_COOKIE, "", {
+    maxAge: -1,
     httpOnly: true
   });
   return reply.code(200).send();
