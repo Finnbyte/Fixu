@@ -70,4 +70,4 @@ export const apiSlice = createApi({
   }),
 });
 
-export const { useGetMonthCalendarEventsQuery, useCreateCalendarEventMutation, useGetCalendarEventsQuery, useUpdateCalendarEventMutation, useGetCoursesQuery, useGetEnrolledCoursesQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
+export const { useGetMonthCalendarEventsQuery, useDeleteCalendarEventMutation, useCreateCalendarEventMutation, useGetCalendarEventsQuery, useUpdateCalendarEventMutation, useGetCoursesQuery, useGetEnrolledCoursesQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
