@@ -1,6 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./Login.module.scss";
+import { authService } from "../../auth/authService";
 
 interface ILoginInputs {
   email: string
@@ -18,15 +19,13 @@ export default function Login() {
   const location = useLocation();
 
   const onSubmit: SubmitHandler<ILoginInputs> = (data) => {
-    fetch("/api/session", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
-    }).then((res) => {
-      if (!res.ok) {
-        res.json().then(payload => setError("root", { message: payload.msg }))
-        return;
-      }
+    const { email, password } = data;
+    authService.login(email, password)
+      .then((res) => {
+        if (!res.ok) {
+          res.json().then(payload => setError("root", { message: payload.msg }))
+          return;
+        }
 
       const searchParams = new URLSearchParams(location.search);
       navigate(searchParams.get("redirect_to") ?? "/app");
