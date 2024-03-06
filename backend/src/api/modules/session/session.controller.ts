@@ -32,6 +32,7 @@ export async function createSessionHandler(req: FastifyRequest, reply: FastifyRe
     sameSite: "none",
     secure: true
   });
+
   reply.code(204).send();
 }
 
