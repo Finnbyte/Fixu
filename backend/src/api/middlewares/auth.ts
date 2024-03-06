@@ -2,11 +2,16 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { ITokenPayload, verifyJwtToken } from "../../utils/token";
 import { fetchUserById } from "../modules/users/users.service";
 
+export const AUTHORIZATION_COOKIE = "Authorization";
+
 async function getTokenPayloadFromHeader(
   req: FastifyRequest
 ): Promise<ITokenPayload | null> {
   try {
-    const authorizationCookie = req.cookies["Authorization"] as string;
+    const authorizationCookie = req.cookies[AUTHORIZATION_COOKIE];
+    if (!authorizationCookie) {
+      return null;
+    }
 
     const token = authorizationCookie.split(" ")[1];
     const tokenPayload = await verifyJwtToken(token);
@@ -23,6 +28,7 @@ export async function isStaff(
 ) {
   const tokenPayload = await getTokenPayloadFromHeader(req);
   if (!tokenPayload) {
+    reply.clearCookie(AUTHORIZATION_COOKIE, { httpOnly: true });
     throw reply.code(401).send({ msg: "Invalid authentication" });
   }
 

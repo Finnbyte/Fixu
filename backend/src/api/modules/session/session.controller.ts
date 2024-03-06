@@ -3,6 +3,7 @@ import { LoginInput } from "./session.schema";
 import { signJwtToken } from "../../../utils/token";
 import { fetchUserByEmail } from "../users/users.service";
 import bcrypt from "bcrypt";
+import { AUTHORIZATION_COOKIE } from "../../middlewares/auth";
 
 export async function getSessionHandler(req: FastifyRequest) {
   return { userId: req.user.id };
@@ -25,14 +26,18 @@ export async function createSessionHandler(req: FastifyRequest, reply: FastifyRe
 
   const token = signJwtToken({ userId: user.id as string });
 
-  reply.cookie("Authorization", `Bearer ${token}`, {
+  reply.setCookie(AUTHORIZATION_COOKIE, `Bearer ${token}`, {
+    path: "/api",
     httpOnly: true,
+    sameSite: "none",
+    secure: true
   });
+
   reply.code(204).send();
 }
 
 export async function deleteSessionHandler(req: FastifyRequest, reply: FastifyReply) {
-  reply.cookie("Authorization", "deleted", {
+  reply.cookie(AUTHORIZATION_COOKIE, "", {
     maxAge: -1,
     httpOnly: true
   });
