@@ -7,9 +7,6 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "/api/" }),
   tagTypes: ["EnrolledCourse", "Course", "Session", "CalendarEvent"],
   endpoints: (builder) => ({
-    getUserData: builder.query<{ userId: string }, void>({
-      query: () => "/session",
-    }),
     getCourses: builder.query<Course[], void>({
       query: () => "/courses",
     }),
@@ -73,4 +70,4 @@ export const apiSlice = createApi({
   }),
 });
 
-export const { useGetMonthCalendarEventsQuery, useDeleteCalendarEventMutation, useCreateCalendarEventMutation, useGetCalendarEventsQuery, useUpdateCalendarEventMutation, useGetCoursesQuery, useGetEnrolledCoursesQuery, useGetUserDataQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
+export const { useGetMonthCalendarEventsQuery, useCreateCalendarEventMutation, useGetCalendarEventsQuery, useUpdateCalendarEventMutation, useGetCoursesQuery, useGetEnrolledCoursesQuery, useUpdateEnrollmentStatusMutation } = apiSlice;
