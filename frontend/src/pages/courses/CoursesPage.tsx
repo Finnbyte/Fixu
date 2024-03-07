@@ -1,7 +1,7 @@
 import styles from "./CoursesPage.module.scss";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useGetCoursesQuery, useGetEnrolledCoursesQuery, useUpdateEnrollmentStatusMutation } from "../../slices/api";
 import { format } from "date-fns";
 import "../../_common.scss";
@@ -11,25 +11,31 @@ import { Spinner, Button, List, DropButton, Box } from "grommet";
 interface CourseProps {
   id: string;
   name: string;
-  isEnrolled: boolean;
+  initialIsEnrolled: boolean;
   description: string;
   createdAt: Date;
   endedAt: Date | null;
   onView: () => void;
 }
 
-function CourseCard({ id, name, description, createdAt, endedAt, isEnrolled, onView }: CourseProps) {
+function CourseCard({ id, name, description, createdAt, endedAt, initialIsEnrolled, onView }: CourseProps) {
   const userId = useAppSelector((state) => state.user.data!.id);
   const [updateEnrollment, { isLoading }] = useUpdateEnrollmentStatusMutation();
+  const [enrolled, setEnrolled] = useState(initialIsEnrolled);
 
   function handleEnrollmentChange() {
-    const newIsEnrolled = !isEnrolled
-    updateEnrollment({ status: newIsEnrolled ? "join" : "leave", userId, courseId: id });
+    const newEnrolled = !enrolled;
+    setEnrolled(newEnrolled);
+    updateEnrollment({ status: newEnrolled ? "join" : "leave", userId, courseId: id });
   }
 
   function formatDate(date: Date) {
     return format(date, "dd MMMM yyyy");
   }
+
+  const dropButtonData = [
+    { label: enrolled ? "Leave" : "Join" }
+  ];
 
   return (
     <div className={styles.course}>
@@ -46,12 +52,12 @@ function CourseCard({ id, name, description, createdAt, endedAt, isEnrolled, onV
                   primaryKey="label"
                   border={false}
                   defaultItemProps={{ onClick: handleEnrollmentChange, hoverIndicator: { color: "blue" } }}
-                  data={[
-                    { label: isEnrolled ? "Leave" : "Join" }
-                  ]}
+                  data={dropButtonData}
                 >
+                  {/* 
+                    // @ts-ignore */}
                   {({ label }, index) => (
-                    <Box>
+                    <Box key={index}>
                       {index === 0 && isLoading
                         ? <Spinner />
                         : label}
@@ -103,7 +109,7 @@ export default function CoursesPage() {
             <CourseCard
               key={course.id}
               onView={() => navigate(`${course.id}`, { relative: "path" })}
-              isEnrolled={enrolledCourses.includes(course.id)}
+              initialIsEnrolled={enrolledCourses.includes(course.id)}
               {...course}
             />
           );
