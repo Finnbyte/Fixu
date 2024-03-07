@@ -47,24 +47,24 @@ function CourseCard({ id, name, description, createdAt, endedAt, initialIsEnroll
             icon={<MoreVertical size={28} cursor={"pointer"} />}
             dropAlign={{ top: "bottom", left: "left" }}
             dropContent={
-              <Box background="rgba(52, 52, 52, 1)">
-                <List
-                  primaryKey="label"
-                  border={false}
-                  defaultItemProps={{ onClick: handleEnrollmentChange, hoverIndicator: { color: "blue" } }}
-                  data={dropButtonData}
-                >
-                  {/* 
+              <List
+                primaryKey="label"
+                background={"black"}
+                border={{ color: "black" }}
+                round="25px"
+                defaultItemProps={{ onClick: handleEnrollmentChange, hoverIndicator: { color: "rgba(40, 52, 52, 1)" } }}
+                data={dropButtonData}
+              >
+                {/* 
                     // @ts-ignore */}
-                  {({ label }, index) => (
-                    <Box key={index}>
-                      {index === 0 && isLoading
-                        ? <Spinner />
-                        : label}
-                    </Box>
-                  )}
-                </List>
-              </Box>
+                {({ label }, index) => (
+                  <Box key={index}>
+                    {index === 0 && isLoading
+                      ? <Spinner />
+                      : label}
+                  </Box>
+                )}
+              </List>
             }
           />
         </div>
