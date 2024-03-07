@@ -7,11 +7,10 @@ import Dashboard from './pages/dashboard/DashboardPage';
 import { AuthGuard } from './components/AuthGuard/AuthGuard';
 import Settings from './pages/settings/Settings';
 import CalendarPage from './pages/calendar/CalendarPage';
-import { Provider } from 'react-redux';
-import { store } from './store';
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import CourseViewPage, { courseViewPageLoader } from "./pages/course-view/CourseViewPage";
+import Providers from "./providers";
 
 export const ROUTES: RouteObject[] = [
   {
@@ -59,9 +58,9 @@ const router = createBrowserRouter(ROUTES);
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
+    <Providers>
       <RouterProvider router={router} />
-    </Provider>
+    </Providers>
   </React.StrictMode>,
   document.getElementById("root")
 );
