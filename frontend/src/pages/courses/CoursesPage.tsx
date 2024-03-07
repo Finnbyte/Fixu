@@ -6,6 +6,7 @@ import { useGetCoursesQuery, useGetEnrolledCoursesQuery, useUpdateEnrollmentStat
 import { format } from "date-fns";
 import "../../_common.scss";
 import { MoreVertical } from "react-feather";
+import { Spinner, Button, List, DropButton, Box } from "grommet";
 
 interface CourseProps {
   id: string;
@@ -67,7 +68,7 @@ function CourseCard({ id, name, description, createdAt, endedAt, isEnrolled, onV
         <span style={{ opacity: "0.55", fontWeight: "bold" }}>{formatDate(createdAt)} - {`${endedAt && formatDate(endedAt)}`}</span>
       </div>
       <div style={{ display: "inline-block", marginLeft: "auto" }}>
-        <button onClick={() => onView()} className={"material-btn"}>View</button>
+        <Button primary onClick={() => onView()} label="View" />
       </div>
     </div>
   )
@@ -84,6 +85,7 @@ export default function CoursesPage() {
   if (!courses || !enrolledCourses) {
     return null;
   }
+
 
   return (
     <div className={styles.page}>
