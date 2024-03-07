@@ -10,13 +10,13 @@ import { MoreVertical } from "react-feather";
 interface CourseProps {
   id: string;
   name: string;
+  isEnrolled: boolean;
   description: string;
   createdAt: Date;
   endedAt: Date | null;
   onView: () => void;
 }
 
-function CourseCard({ name, description, createdAt, endedAt, onView }: CourseProps) {
 function CourseCard({ id, name, description, createdAt, endedAt, isEnrolled, onView }: CourseProps) {
   function formatDate(date: Date) {
     return format(date, "dd MMMM yyyy");
@@ -70,6 +70,7 @@ export default function CoursesPage() {
             <CourseCard
               key={course.id}
               onView={() => navigate(`${course.id}`, { relative: "path" })}
+              isEnrolled={enrolledCourses.includes(course.id)}
               {...course}
             />
           );
