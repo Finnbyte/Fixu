@@ -2,7 +2,7 @@ import styles from "./CoursesPage.module.scss";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { useGetCoursesQuery, useGetEnrolledCoursesQuery } from "../../slices/api";
+import { useGetCoursesQuery, useGetEnrolledCoursesQuery, useUpdateEnrollmentStatusMutation } from "../../slices/api";
 import { format } from "date-fns";
 import "../../_common.scss";
 import { MoreVertical } from "react-feather";
@@ -18,6 +18,14 @@ interface CourseProps {
 }
 
 function CourseCard({ id, name, description, createdAt, endedAt, isEnrolled, onView }: CourseProps) {
+  const userId = useAppSelector((state) => state.user.data!.id);
+  const [updateEnrollment, { isLoading }] = useUpdateEnrollmentStatusMutation();
+
+  function handleEnrollmentChange() {
+    const newIsEnrolled = !isEnrolled
+    updateEnrollment({ status: newIsEnrolled ? "join" : "leave", userId, courseId: id });
+  }
+
   function formatDate(date: Date) {
     return format(date, "dd MMMM yyyy");
   }
@@ -28,11 +36,34 @@ function CourseCard({ id, name, description, createdAt, endedAt, isEnrolled, onV
       <div className={styles["information-container"]}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <h2>{name}</h2>
-          <MoreVertical style={{ marginBottom: "30px" }} size={28} cursor={"pointer"} />
+          <DropButton
+            icon={<MoreVertical size={28} cursor={"pointer"} />}
+            dropAlign={{ top: "bottom", left: "left" }}
+            dropContent={
+              <Box background="rgba(52, 52, 52, 1)">
+                <List
+                  primaryKey="label"
+                  border={false}
+                  defaultItemProps={{ onClick: handleEnrollmentChange, hoverIndicator: { color: "blue" } }}
+                  data={[
+                    { label: isEnrolled ? "Leave" : "Join" }
+                  ]}
+                >
+                  {({ label }, index) => (
+                    <Box>
+                      {index === 0 && isLoading
+                        ? <Spinner />
+                        : label}
+                    </Box>
+                  )}
+                </List>
+              </Box>
+            }
+          />
         </div>
-        <br/>
+        <br />
         {description || "No description"}
-        <br/><br/>
+        <br /><br />
         <span style={{ opacity: "0.55", fontWeight: "bold" }}>{formatDate(createdAt)} - {`${endedAt && formatDate(endedAt)}`}</span>
       </div>
       <div style={{ display: "inline-block", marginLeft: "auto" }}>
