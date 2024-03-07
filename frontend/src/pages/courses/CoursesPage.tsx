@@ -26,7 +26,7 @@ function CourseCard({ name, description, createdAt, endedAt, onView }: CoursePro
       <div className={styles["information-container"]}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <h2>{name}</h2>
-          <MoreVertical style={{ marginBottom: "30px" }} size={28} />
+          <MoreVertical style={{ marginBottom: "30px" }} size={28} cursor={"pointer"} />
         </div>
         <br/>
         {description || "No description"}
