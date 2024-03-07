@@ -8,6 +8,7 @@ import "../../_common.scss";
 import { MoreVertical } from "react-feather";
 
 interface CourseProps {
+  id: string;
   name: string;
   description: string;
   createdAt: Date;
@@ -16,6 +17,7 @@ interface CourseProps {
 }
 
 function CourseCard({ name, description, createdAt, endedAt, onView }: CourseProps) {
+function CourseCard({ id, name, description, createdAt, endedAt, isEnrolled, onView }: CourseProps) {
   function formatDate(date: Date) {
     return format(date, "dd MMMM yyyy");
   }
